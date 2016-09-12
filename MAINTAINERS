@@ -14,6 +14,7 @@ Descriptions of section entries:
         L: Mailing list that is relevant to this area
         M: Designated reviewer: FullName <address@domain>
            These reviewers should be CCed on patches.
+        P: Downstream Packager contact
         S: Status, one of the following:
            Supported:   Someone is actually paid to look after this.
            Maintained:  Someone actually looks after it.
@@ -42,18 +43,23 @@ F:	buildlib/
 CXGB3 USERSPACE PROVIDER (for iw_cxgb3.ko)
 M:	Steve Wise <swise@opengridcomputing.com>
 S:	Supported
-F:	libcxgb3/
+F:	providers/cxgb3/
+P:	OFED and Debian Developement and Discussion <pkg-ofed-devel@lists.alioth.debian.org>
+>>>>>>> 723ab888df455c... Annotate the MAINTAINERS file with downstream packagers
 
 CXGB4 USERSPACE PROVIDER (for iw_cxgb4.ko)
 M:	Steve Wise <swise@opengridcomputing.com>
 S:	Supported
-F:	libcxgb4/
+F:	providers/cxgb4/
+P:	Doug Ledford <dledford@redhat.com>
 
 HF1 USERSPACE PROVIDER (for hf1.ko)
 M:	Mike Marciniszyn <mike.marciniszyn@intel.com>
 S:	Supported
 L:	intel-opa@lists.01.org
-F:	libhfi1verbs/
+F:	providers/hfi1verbs/
+P:	Donald Dutile <ddutile@redhat.com>
+P:	Dennis Dalessandro <dennis.dalessandro@intel.com>
 
 I40IW USERSPACE PROVIDER (for i40iw.ko)
 M:	Tatyana Nikolova <Tatyana.E.Nikolova@intel.com>
@@ -69,58 +75,84 @@ IPATH/QIB USERSPACE PROVIDER (for ib_qib.ko)
 M:	Mike Marciniszyn <mike.marciniszyn@intel.com>
 S:	Supported
 L:	ibsupport@intel.com
-F:	libipathverbs/
+F:	providers/ipathverbs/
+P:	OFED and Debian Developement and Discussion <pkg-ofed-devel@lists.alioth.debian.org>
+P:	Doug Ledford <dledford@redhat.com>
+P:	Honggang Li <honli@redhat.com>
 
 IWARP PORT MAPPER DAEMON (for iwarp kernel providers)
 M:	Tatyana Nikolova <Tatyana.E.Nikolova@intel.com>
 S:	Supported
 F:	iwpmd/
+P:	Honggang Li <honli@redhat.com>
 
 LIBIBCM USERSPACE LIBRARY FOR IB CONNECTION MANAGEMENT (/dev/infiniband/ucmX)
 M:	Sean Hefty <sean.hefty@intel.com>
 S:	Obsolete
 F:	libibcm/
+P:	OFED and Debian Developement and Discussion <pkg-ofed-devel@lists.alioth.debian.org>
+P:	Doug Ledford <dledford@redhat.com>
+P:	Honggang Li <honli@redhat.com>
 
 LIBIBUMAD USERSPACE LIBRARY FOR SMP AND GMP MAD PROCESSING (/dev/infiniband/umadX)
 M:	Hal Rosenstock <hal@dev.mellanox.co.il>
 S:	Supported
 F:	libibumad/
+P:	OFED and Debian Developement and Discussion <pkg-ofed-devel@lists.alioth.debian.org>
+P:	Doug Ledford <dledford@redhat.com>
+P:	Honggang Li <honli@redhat.com>
 
 LIBIBVERBS USERSPACE LIBRARY FOR RDMA VERBS (/dev/infiniband/uverbsX)
 M:	Doug Ledford <dledford@redhat.com>
 M:	Yishai Hadas <yishaih@dev.mellanox.co.il>
 S:	Supported
 F:	libibverbs/
+P:	OFED and Debian Developement and Discussion <pkg-ofed-devel@lists.alioth.debian.org>
+P:	Doug Ledford <dledford@redhat.com>
+P:	Honggang Li <honli@redhat.com>
 
 LIBRDMACM USERSPACE LIBRARY FOR RDMA CONNECTION MANAGEMENT (/dev/infiniband/rdma_cm)
 M:	Sean Hefty <sean.hefty@intel.com>
 S:	Supported
 F:	librdmacm/
+P:	OFED and Debian Developement and Discussion <pkg-ofed-devel@lists.alioth.debian.org>
+P:	Doug Ledford <dledford@redhat.com>
+P:	Honggang Li <honli@redhat.com>
 
 MLX4 USERSPACE PROVIDER (for mlx4_ib.ko)
 M:	Yishai Hadas <yishaih@mellanox.com>
 S:	Supported
-F:	libmlx4/
+F:	providers/mlx4/
+P:	Doug Ledford <dledford@redhat.com>
+P:	Honggang Li <honli@redhat.com>
 
 MLX5 USERSPACE PROVIDER (for mlx5_ib.ko)
 M:	Yishai Hadas <yishaih@mellanox.com>
 S:	Supported
-F:	libmlx5/
+F:	providers/mlx5/
+P:	OFED and Debian Developement and Discussion <pkg-ofed-devel@lists.alioth.debian.org>
+P:	Kamal Heib <kheib@redhat.com>
 
 MTHCA USERSPACE PROVIDER (for ib_mthca.ko)
 M:	Vladimir Sokolovsky <vlad@mellanox.com>
 S:	Supported
-F:	libmthca/
+F:	providers/mthca/
+P:	Doug Ledford <dledford@redhat.com>
 
 NES USERSPACE PROVIDER (for iw_nes.ko)
 M:	Tatyana Nikolova <Tatyana.E.Nikolova@intel.com>
 S:	Supported
-F:	libnes/
+F:	providers/nes/
+P:	OFED and Debian Developement and Discussion <pkg-ofed-devel@lists.alioth.debian.org>
+P:	Doug Ledford <dledford@redhat.com>
+P:	Honggang Li <honli@redhat.com>
 
 OCRDMA USERSPACE PROVIDER (for ocrdma.ko)
 M:	Devesh Sharma <Devesh.sharma@broadcom.com>
 S:	Supported
-F:	libocrdma/
+F:	providers/ocrdma/
+P:	Doug Ledford <dledford@redhat.com>
+P:	Selvin Xavier <selvin.xavier@broadcom.com>
 
 RXE SOFT ROCEE USERSPACE PROVIDER (for rdma_rxe.ko)
 M:	Moni Shoua <monis@mellanox.com>
@@ -131,3 +163,6 @@ SRP DAEMON (for ib_srp.ko)
 M:	Bart Van Assche <bvanassche@acm.org>
 S:	Supported
 F:	srp_daemon/
+P:	OFED and Debian Developement and Discussion <pkg-ofed-devel@lists.alioth.debian.org>
+P:	Doug Ledford <dledford@redhat.com>
+P:	Honggang Li <honli@redhat.com>
