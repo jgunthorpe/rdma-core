@@ -43,6 +43,7 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <fcntl.h>
 #include <dirent.h>
 #include <errno.h>
 #include <assert.h>
@@ -66,13 +67,50 @@ struct ibv_driver {
 static LIST_HEAD(driver_name_list);
 static LIST_HEAD(driver_list);
 
+/* Fill in information from /sys/class/infiniband_uverbs/XX */
+static bool fill_sysfs_uverbs(struct verbs_sysfs_dev *sysfs_dev,
+			      const char *class_path, int uverbs_fd)
+{
+	struct stat st;
+	char value[8];
+
+	if (read_sysfs_file_at(uverbs_fd, "ibdev", sysfs_dev->ibdev_name,
+			       sizeof(sysfs_dev->ibdev_name)) < 0)
+		return false;
+
+	if (read_sysfs_file_at(uverbs_fd, "abi_version", value, sizeof(value)) >
+	    0)
+		sysfs_dev->abi_ver = strtol(value, NULL, 10);
+
+	if (read_sysfs_file_at(uverbs_fd, "device/modalias",
+			       sysfs_dev->modalias,
+			       sizeof(sysfs_dev->modalias)) <= 0)
+		sysfs_dev->modalias[0] = 0;
+
+	if (!check_snprintf(sysfs_dev->ibdev_path,
+			    sizeof(sysfs_dev->ibdev_path),
+			    "%s/class/infiniband/%s", ibv_get_sysfs_path(),
+			    sysfs_dev->ibdev_name))
+		return false;
+
+	if (!check_snprintf(sysfs_dev->sysfs_path,
+			    sizeof(sysfs_dev->sysfs_path), "%s/%s", class_path,
+			    sysfs_dev->sysfs_name))
+		return false;
+
+	if (stat(sysfs_dev->ibdev_path, &st))
+		return false;
+	sysfs_dev->time_created = st.st_mtim;
+
+	return true;
+}
+
 static int find_sysfs_devs(struct list_head *tmp_sysfs_dev_list)
 {
 	char class_path[IBV_SYSFS_PATH_MAX];
 	DIR *class_dir;
 	struct dirent *dent;
 	struct verbs_sysfs_dev *sysfs_dev = NULL;
-	char value[8];
 	int ret = 0;
 
 	if (!check_snprintf(class_path, sizeof(class_path),
@@ -85,8 +123,16 @@ static int find_sysfs_devs(struct list_head *tmp_sysfs_dev_list)
 
 	while ((dent = readdir(class_dir))) {
 		struct stat buf;
+		int devfd;
+		int rc;
 
 		if (dent->d_name[0] == '.')
+			continue;
+
+		devfd = openat(dirfd(class_dir), dent->d_name,
+			       O_RDONLY | O_NONBLOCK | O_DIRECTORY | O_CLOEXEC |
+				   O_PATH);
+		if (devfd == -1)
 			continue;
 
 		if (!sysfs_dev)
@@ -96,53 +142,25 @@ static int find_sysfs_devs(struct list_head *tmp_sysfs_dev_list)
 			goto out;
 		}
 
-		if (!check_snprintf(sysfs_dev->sysfs_path, sizeof sysfs_dev->sysfs_path,
-				    "%s/%s", class_path, dent->d_name))
+		if (!check_snprintf(sysfs_dev->sysfs_name,
+				    sizeof(sysfs_dev->sysfs_name), "%s",
+				    dent->d_name))
 			continue;
 
-		if (stat(sysfs_dev->sysfs_path, &buf)) {
-			fprintf(stderr, PFX "Warning: couldn't stat '%s'.\n",
+		rc = fill_sysfs_uverbs(sysfs_dev, class_path, devfd);
+
+		close(devfd);
+
+		/* Suppress the logging if the device was hot-removed. */
+		if (!rc &&
+		    fstatat(dirfd(class_dir), dent->d_name, &buf, 0) == 0) {
+			fprintf(stderr, PFX
+				"Warning: couldn't load uverbs device '%s'.\n",
 				sysfs_dev->sysfs_path);
-			continue;
 		}
 
-		if (!S_ISDIR(buf.st_mode))
+		if (!rc)
 			continue;
-
-		if (!check_snprintf(sysfs_dev->sysfs_name, sizeof sysfs_dev->sysfs_name,
-				    "%s", dent->d_name))
-			continue;
-
-		if (ibv_read_sysfs_file(sysfs_dev->sysfs_path, "ibdev",
-					sysfs_dev->ibdev_name,
-					sizeof sysfs_dev->ibdev_name) < 0) {
-			fprintf(stderr, PFX "Warning: no ibdev class attr for '%s'.\n",
-				dent->d_name);
-			continue;
-		}
-
-		if (!check_snprintf(
-			sysfs_dev->ibdev_path, sizeof(sysfs_dev->ibdev_path),
-			"%s/class/infiniband/%s", ibv_get_sysfs_path(),
-			sysfs_dev->ibdev_name))
-			continue;
-
-		if (stat(sysfs_dev->ibdev_path, &buf)) {
-			fprintf(stderr, PFX "Warning: couldn't stat '%s'.\n",
-				sysfs_dev->ibdev_path);
-			continue;
-		}
-
-		sysfs_dev->time_created = buf.st_mtim;
-
-		if (ibv_read_sysfs_file(sysfs_dev->sysfs_path, "abi_version",
-					value, sizeof value) > 0)
-			sysfs_dev->abi_ver = strtol(value, NULL, 10);
-
-		if (ibv_read_sysfs_file(sysfs_dev->sysfs_path,
-					"device/modalias", sysfs_dev->modalias,
-					sizeof(sysfs_dev->modalias)) <= 0)
-			sysfs_dev->modalias[0] = 0;
 
 		list_add(tmp_sysfs_dev_list, &sysfs_dev->entry);
 		sysfs_dev      = NULL;
