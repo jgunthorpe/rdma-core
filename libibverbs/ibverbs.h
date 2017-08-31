@@ -56,6 +56,8 @@ int ibverbs_init(void);
 void ibverbs_device_put(struct ibv_device *dev);
 void ibverbs_device_hold(struct ibv_device *dev);
 
+int read_sysfs_file_at(int dirfd, const char *file, char *buf, size_t size);
+
 struct verbs_ex_private {
 	struct ibv_cq_ex *(*create_cq_ex)(struct ibv_context *context,
 					  struct ibv_cq_init_attr_ex *init_attr);
