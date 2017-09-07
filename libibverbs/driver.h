@@ -147,6 +147,7 @@ struct verbs_sysfs_dev {
 	char ibdev_path[IBV_SYSFS_PATH_MAX];
 	char modalias[512];
 	int abi_ver;
+	enum ibv_node_type node_type;
 	struct timespec time_created;
 };
 

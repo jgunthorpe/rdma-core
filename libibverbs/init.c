@@ -67,12 +67,50 @@ struct ibv_driver {
 static LIST_HEAD(driver_name_list);
 static LIST_HEAD(driver_list);
 
+static bool get_node_type(const struct verbs_sysfs_dev *sysfs_dev, int devfd,
+			  enum ibv_node_type *res)
+{
+	char value[16];
+	long node_type;
+
+	if (read_sysfs_file_at(devfd, "node_type", value, sizeof(value)) <= 0) {
+		fprintf(stderr, PFX "Warning: no node_type attr under %s.\n",
+			sysfs_dev->ibdev_path);
+		*res = IBV_NODE_UNKNOWN;
+		return false;
+	}
+
+	node_type = strtol(value, NULL, 10);
+	if (node_type < IBV_NODE_CA || node_type > IBV_NODE_USNIC_UDP)
+		*res = IBV_NODE_UNKNOWN;
+	else
+		*res = node_type;
+
+	return true;
+}
+
+/* Fill in information from /sys/class/infiniband/XX */
+static bool fill_sysfs_dev(struct verbs_sysfs_dev *sysfs_dev, int devfd)
+{
+	struct stat st;
+
+	if (fstat(devfd, &st))
+		return false;
+	sysfs_dev->time_created = st.st_mtim;
+
+	if (!get_node_type(sysfs_dev, devfd, &sysfs_dev->node_type))
+		return false;
+
+	return true;
+}
+
 /* Fill in information from /sys/class/infiniband_uverbs/XX */
 static bool fill_sysfs_uverbs(struct verbs_sysfs_dev *sysfs_dev,
 			      const char *class_path, int uverbs_fd)
 {
-	struct stat st;
 	char value[8];
+	int devfd;
+	bool ret;
 
 	if (read_sysfs_file_at(uverbs_fd, "ibdev", sysfs_dev->ibdev_name,
 			       sizeof(sysfs_dev->ibdev_name)) < 0)
@@ -98,11 +136,16 @@ static bool fill_sysfs_uverbs(struct verbs_sysfs_dev *sysfs_dev,
 			    sysfs_dev->sysfs_name))
 		return false;
 
-	if (stat(sysfs_dev->ibdev_path, &st))
+	/* Now do the device */
+	devfd = open(sysfs_dev->ibdev_path,
+		     O_RDONLY | O_NONBLOCK | O_DIRECTORY | O_CLOEXEC);
+	if (devfd == -1)
 		return false;
-	sysfs_dev->time_created = st.st_mtim;
 
-	return true;
+	ret = fill_sysfs_dev(sysfs_dev, devfd);
+	close(devfd);
+
+	return ret;
 }
 
 static int find_sysfs_devs(struct list_head *tmp_sysfs_dev_list)
@@ -463,7 +506,6 @@ static struct verbs_device *try_driver(const struct verbs_device_ops *ops,
 {
 	struct verbs_device *vdev;
 	struct ibv_device *dev;
-	char value[16];
 
 	if (!match_device(ops, sysfs_dev))
 		return NULL;
@@ -482,15 +524,12 @@ static struct verbs_device *try_driver(const struct verbs_device_ops *ops,
 	assert(dev->_ops._dummy1 == NULL);
 	assert(dev->_ops._dummy2 == NULL);
 
-	if (ibv_read_sysfs_file(sysfs_dev->ibdev_path, "node_type", value, sizeof value) < 0) {
-		fprintf(stderr, PFX "Warning: no node_type attr under %s.\n",
-			sysfs_dev->ibdev_path);
-			dev->node_type = IBV_NODE_UNKNOWN;
-	} else {
-		dev->node_type = strtol(value, NULL, 10);
-		if (dev->node_type < IBV_NODE_CA || dev->node_type > IBV_NODE_USNIC_UDP)
-			dev->node_type = IBV_NODE_UNKNOWN;
-	}
+	strcpy(dev->dev_name,   sysfs_dev->sysfs_name);
+	strcpy(dev->dev_path,   sysfs_dev->sysfs_path);
+	strcpy(dev->name,       sysfs_dev->ibdev_name);
+	strcpy(dev->ibdev_path, sysfs_dev->ibdev_path);
+	vdev->sysfs = sysfs_dev;
+	dev->node_type = sysfs_dev->node_type;
 
 	switch (dev->node_type) {
 	case IBV_NODE_CA:
@@ -511,12 +550,6 @@ static struct verbs_device *try_driver(const struct verbs_device_ops *ops,
 		dev->transport_type = IBV_TRANSPORT_UNKNOWN;
 		break;
 	}
-
-	strcpy(dev->dev_name,   sysfs_dev->sysfs_name);
-	strcpy(dev->dev_path,   sysfs_dev->sysfs_path);
-	strcpy(dev->name,       sysfs_dev->ibdev_name);
-	strcpy(dev->ibdev_path, sysfs_dev->ibdev_path);
-	vdev->sysfs = sysfs_dev;
 
 	return vdev;
 }
