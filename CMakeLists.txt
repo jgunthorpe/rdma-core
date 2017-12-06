@@ -135,6 +135,7 @@ include(RDMA_BuildType)
 include(RDMA_DoFixup)
 include(publish_headers)
 include(rdma_functions)
+include(rdma_man)
 
 if (NOT DEFINED ENABLE_STATIC)
   set(ENABLE_STATIC "OFF" CACHE BOOL "Produce static linking libraries as well as shared libraries.")
@@ -281,6 +282,9 @@ endif()
 
 # Look for Python
 FIND_PACKAGE (PythonInterp)
+
+# Look for pandoc
+FIND_PACKAGE(pandoc REQUIRED)
 
 #-------------------------
 # Find libraries

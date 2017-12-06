@@ -229,39 +229,6 @@ function(rdma_test_executable EXEC)
   set_target_properties(${EXEC} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${BUILD_BIN}")
 endfunction()
 
-# Install man pages. This deduces the section from the trailing integer in the
-# filename
-function(rdma_man_pages)
-  foreach(I ${ARGN})
-    if ("${I}" MATCHES "\\.in$")
-      string(REGEX REPLACE "^.+[.](.+)\\.in$" "\\1" MAN_SECT "${I}")
-      string(REGEX REPLACE "^(.+)\\.in$" "\\1" BASE_NAME "${I}")
-      get_filename_component(BASE_NAME "${BASE_NAME}" NAME)
-      rdma_subst_install(FILES "${I}"
-	DESTINATION "${CMAKE_INSTALL_MANDIR}/man${MAN_SECT}/"
-	RENAME "${BASE_NAME}")
-    else()
-      string(REGEX REPLACE "^.+[.](.+)$" "\\1" MAN_SECT "${I}")
-      install(FILES "${I}" DESTINATION "${CMAKE_INSTALL_MANDIR}/man${MAN_SECT}/")
-    endif()
-  endforeach()
-endfunction()
-
-# Create an alias for a man page, using a symlink.
-# Input is a list of pairs of names (MAN_PAGE ALIAS)
-# NOTE: The section must currently be the same for both.
-function(rdma_alias_man_pages)
-  list(LENGTH ARGN LEN)
-  math(EXPR LEN ${LEN}-1)
-  foreach(I RANGE 0 ${LEN} 2)
-    list(GET ARGN ${I} FROM)
-    math(EXPR I ${I}+1)
-    list(GET ARGN ${I} TO)
-    string(REGEX REPLACE "^.+[.](.+)$" "\\1" MAN_SECT ${FROM})
-    rdma_install_symlink("${FROM}" "${CMAKE_INSTALL_MANDIR}/man${MAN_SECT}/${TO}")
-  endforeach()
-endfunction()
-
 # Finalize the setup of the static libraries by copying the meta information
 # from the shared and setting up the libtool .la files.
 function(rdma_finalize_libs)
