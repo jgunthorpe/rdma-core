@@ -12,7 +12,6 @@ ibv_rereg_mr \- re-register a memory region (MR)
 .BI "                 struct ibv_pd * " "pd" ", void " " *addr",
 .BI "                 size_t " " length" ", int " " access");
 .fi
-.fi
 .SH "DESCRIPTION"
 .B ibv_rereg_mr()
 Modifies the attributes of an existing memory region (MR)
@@ -48,7 +47,6 @@ represents its length.
 The access and other flags are represented in the field
 .I access\fR.
 This field describes the desired memory protection attributes; it is either 0 or the bitwise OR of one or more of ibv_access_flags.
-.TP
 .SH "RETURN VALUE"
 .B ibv_rereg_mr()
 returns 0 on success, otherwise an error has occurred,
@@ -64,7 +62,7 @@ IBV_REREG_MR_ERR_DO_FORK_OLD - New MR is valid, failed via do fork on old addres
 IBV_REREG_MR_ERR_CMD - MR shouldn't be used, command error.
 .br
 IBV_REREG_MR_ERR_CMD_AND_DO_FORK_NEW - MR shouldn't be used, command error, invalid fork state on new address range.
-
+.sp
 .SH "NOTES"
 Even on a failure, the user still needs to call ibv_dereg_mr on this MR.
 .SH "SEE ALSO"

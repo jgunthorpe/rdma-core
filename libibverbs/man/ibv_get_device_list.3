@@ -51,7 +51,7 @@ Client code should open all the devices it intends to use with
 Once it frees the array with
 .B ibv_free_device_list()\fR,
 it will be able to use only the open devices; pointers to unopened devices will no longer be valid.
-.P
+.PP
 Setting the environment variable
 .BR IBV_SHOW_WARNINGS
 will cause warnings to be emitted to stderr if a kernel verbs device

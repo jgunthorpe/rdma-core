@@ -14,7 +14,7 @@ mlx5dv_init_obj \- Initialize mlx5 direct verbs object from ibv_xxx structures
 .B mlx5dv_init_obj()
 This function will initialize mlx5dv_xxx structs based on supplied type. The information
 for initialization is taken from ibv_xx structs supplied as part of input.
-
+.PP
 Request information of CQ marks its owned by direct verbs for all consumer index
 related actions. The initialization type can be combination of several types together.
 .PP
@@ -45,7 +45,7 @@ uint32_t        size;
 uint64_t                comp_mask;
 .in -8
 };
-
+.sp
 struct mlx5dv_cq {
 .in +8
 void                    *buf;
@@ -57,7 +57,7 @@ uint32_t                cqn;
 uint64_t                comp_mask;
 .in -8
 };
-
+.sp
 struct mlx5dv_srq {
 .in +8
 void                    *buf;
@@ -68,7 +68,7 @@ uint32_t                tail;
 uint64_t                comp_mask;
 .in -8
 };
-
+.sp
 struct mlx5dv_rwq {
 .in +8
 void            *buf;
@@ -78,7 +78,7 @@ uint32_t        stride;
 uint64_t        comp_mask;
 .in -8
 };
-
+.sp
 struct mlx5dv_obj {
 .in +8
 struct {
@@ -107,7 +107,7 @@ struct mlx5dv_rwq       *out;
 } rwq;
 .in -8
 };
-
+.sp
 enum mlx5dv_obj_type {
 .in +8
 MLX5DV_OBJ_QP   = 1 << 0,

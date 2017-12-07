@@ -42,7 +42,6 @@ uint32_t                source_qpn;     /* Source QP number, creation flag IBV_Q
 .in -8
 };
 .sp
-.nf
 struct ibv_qp_cap {
 .in +8
 uint32_t                max_send_wr;    /* Requested max number of outstanding WRs in the SQ */
@@ -52,7 +51,7 @@ uint32_t                max_recv_sge;   /* Requested max number of s/g elements 
 uint32_t                max_inline_data;/* Requested max number of data (bytes) that can be posted inline to the SQ, otherwise 0 */
 .in -8
 };
-.nf
+.sp
 enum ibv_qp_create_flags {
 .in +8
 IBV_QP_CREATE_BLOCK_SELF_MCAST_LB       = 1 << 1, /* Prevent self multicast loopback */
@@ -62,7 +61,7 @@ IBV_QP_CREATE_SOURCE_QPN                = 1 << 10, /* The created QP will use th
 IBV_QP_CREATE_PCI_WRITE_END_PADDING     = 1 << 11, /* Incoming packets will be padded to cacheline size */
 .in -8
 };
-.nf
+.sp
 struct ibv_rx_hash_conf {
 .in +8
 uint8_t                rx_hash_function;       /* RX hash function, use enum ibv_rx_hash_function_flags */
@@ -71,9 +70,7 @@ uint8_t                *rx_hash_key;           /* RX hash key data */
 uint64_t               rx_hash_fields_mask;    /* RX fields that should participate in the hashing, use enum ibv_rx_hash_fields */
 .in -8
 };
-.fi
-
-.nf
+.sp
 enum ibv_rx_hash_fields {
 .in +8
 IBV_RX_HASH_SRC_IPV4            = 1 << 0,
@@ -91,7 +88,6 @@ IBV_RX_HASH_INNER		= (1UL << 31),
 .in -8
 };
 .fi
-
 .PP
 The function
 .B ibv_create_qp_ex()

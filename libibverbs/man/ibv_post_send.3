@@ -139,7 +139,7 @@ IBV_WR_TSO                  |     X      |            |            |            
 The attribute send_flags describes the properties of the \s-1WR\s0. It is either 0 or the bitwise \s-1OR\s0 of one or more of the following flags:
 .PP
 .TP
-.B IBV_SEND_FENCE \fR Set the fence indicator.  Valid only for QPs with Transport Service Type \fBIBV_QPT_RC
+.B IBV_SEND_FENCE \fR Set the fence indicator.  Valid only for QPs with Transport Service Type \fBIBV_QPT_RC\fR
 .TP
 .B IBV_SEND_SIGNALED \fR Set the completion notification indicator.  Relevant only if QP was created with sq_sig_all=0
 .TP

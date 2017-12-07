@@ -12,7 +12,7 @@ ibv_create_flow, ibv_destroy_flow \- create or destroy flow steering rules
 .sp
 .fi
 .SH "DESCRIPTION"
-.SS ibv_create_flow()
+.B ibv_create_flow()
 allows a user application QP
 .I qp
 to be attached into a specified flow
@@ -56,8 +56,7 @@ IBV_FLOW_ATTR_FLAGS_DONT_TRAP       = 1 << 1,	/* Rule doesn't trap received pack
 };
 .fi
 .nf
-.br
-
+.sp
 enum ibv_flow_spec_type {
 .in +8
 IBV_FLOW_SPEC_ETH                       = 0x20,   /* Flow specification of L2 header */
@@ -72,9 +71,10 @@ IBV_FLOW_SPEC_ACTION_TAG                = 0x1000, /* Action tagging matched pack
 IBV_FLOW_SPEC_ACTION_DROP               = 0x1001, /* Action dropping matched packet */
 .in -8
 };
-.br
-
+.sp
+.fi
 Flow specification general structure:
+.nf
 .BR
 struct ibv_flow_spec_xxx {
 .in +8
@@ -84,6 +84,7 @@ struct ibv_flow_xxx_filter val;
 struct ibv_flow_xxx_filter mask; /* Defines which bits from the filter value are applicable when looking for a match in the incoming packet */
 .in -8
 };
+.fi
 .PP
 Each spec struct holds the relevant network layer parameters for matching. To enforce the match, the user sets a mask for each parameter.
 .br
@@ -92,7 +93,7 @@ If the bit is set in the mask, the corresponding bit in the value should be matc
 Note that most vendors support either full mask (all "1"s) or zero mask (all "0"s).
 .br
 .B Network parameters in the relevant network structs should be given in network order (big endian).
-
+.PP
 .SS Flow domains and priority
 Flow steering defines the concept of domain and priority. Each domain represents an application that can attach a flow.
 Domains are prioritized. A higher priority domain will always supersede a lower priority domain when their flow specifications overlap.
@@ -161,7 +162,6 @@ struct ibv_flow_spec_ipv4       spec_ipv4;
 .in -8
 } __attribute__((packed));
 .sp
-.nf
 struct raw_eth_flow_attr flow_attr = {
 .in +8
         .attr = {
@@ -204,7 +204,7 @@ struct raw_eth_flow_attr flow_attr = {
 .in -8
 };
 .sp
-.nf
+.fi
 .SH "AUTHORS"
 .TP
 Hadar Hen Zion <hadarh@mellanox.com>

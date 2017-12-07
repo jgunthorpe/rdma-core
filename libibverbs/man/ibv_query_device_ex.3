@@ -37,7 +37,7 @@ struct ibv_tm_caps     tm_caps;                    /* Tag matching capabilities 
 struct ibv_cq_moderation_caps  cq_mod_caps;        /* CQ moderation max capabilities */
 .in -8
 };
-
+.sp
 struct ibv_odp_caps {
         uint64_t general_odp_caps;    /* Mask with enum ibv_odp_general_cap_bits */
         struct {
@@ -46,11 +46,11 @@ struct ibv_odp_caps {
                 uint32_t ud_odp_caps; /* Mask with enum ibv_odp_tranport_cap_bits to know which operations are supported. */
         } per_transport_caps;
 };
-
+.sp
 enum ibv_odp_general_cap_bits {
         IBV_ODP_SUPPORT = 1 << 0, /* On demand paging is supported */
 };
-
+.sp
 enum ibv_odp_transport_cap_bits {
         IBV_ODP_SUPPORT_SEND     = 1 << 0, /* Send operations support on-demand paging */
         IBV_ODP_SUPPORT_RECV     = 1 << 1, /* Receive operations support on-demand paging */
@@ -58,12 +58,12 @@ enum ibv_odp_transport_cap_bits {
         IBV_ODP_SUPPORT_READ     = 1 << 3, /* RDMA-Read operations support on-demand paging */
         IBV_ODP_SUPPORT_ATOMIC   = 1 << 4, /* RDMA-Atomic operations support on-demand paging */
 };
-
+.sp
 struct ibv_tso_caps {
         uint32_t max_tso;        /* Maximum payload size in bytes supported for segmentation by TSO engine.*/
         uint32_t supported_qpts; /* Bitmap showing which QP types are supported by TSO operation. */
 };
-
+.sp
 struct ibv_rss_caps {
         uint32_t supported_qpts;                   /* Bitmap showing which QP types are supported RSS */
         uint32_t max_rwq_indirection_tables;       /* Max receive work queue indirection tables */
@@ -71,13 +71,13 @@ struct ibv_rss_caps {
         uint64_t rx_hash_fields_mask;              /* Mask with enum ibv_rx_hash_fields to know which incoming packet's field can participates in the RX hash */
         uint8_t  rx_hash_function;                 /* Mask with enum ibv_rx_hash_function_flags to know which hash functions are supported */
 };
-
+.sp
 struct ibv_packet_pacing_caps {
        uint32_t qp_rate_limit_min; /* Minimum rate limit in kbps */
        uint32_t qp_rate_limit_max; /* Maximum rate limit in kbps */
        uint32_t supported_qpts;    /* Bitmap showing which QP types are supported. */
 };
-
+.sp
 enum ibv_raw_packet_caps {
 .in +8
 IBV_RAW_PACKET_CAP_CVLAN_STRIPPING	= 1 << 0, /* CVLAN stripping is supported */
@@ -85,13 +85,13 @@ IBV_RAW_PACKET_CAP_SCATTER_FCS		= 1 << 1, /* FCS scattering is supported */
 IBV_RAW_PACKET_CAP_IP_CSUM		= 1 << 2, /* IP CSUM offload is supported */
 .in -8
 };
-
+.sp
 enum ibv_tm_cap_flags {
 .in +8
 IBV_TM_CAP_RC   = 1 << 0,            /* Support tag matching on RC transport */
 .in -8
 };
-
+.sp
 struct ibv_tm_caps {
 .in +8
 uint32_t        max_rndv_hdr_size;   /* Max size of rendezvous request header */
@@ -101,36 +101,33 @@ uint32_t        max_ops;             /* Max number of outstanding list operation
 uint32_t        max_sge;             /* Max number of SGEs in a tagged buffer */
 .in -8
 };
-
+.sp
 struct ibv_cq_moderation_caps {
 	uint16_t max_cq_count;
 	uint16_t max_cq_period;
 };
 .fi
-
 Extended device capability flags (device_cap_flags_ex):
 .br
-.TP 7
-IBV_DEVICE_PCI_WRITE_END_PADDING
-
+.TP
+.B IBV_DEVICE_PCI_WRITE_END_PADDING
 Indicates the device has support for padding PCI writes to a full cache line.
-
+.PP
 Padding packets to full cache lines reduces the amount of traffic
 required at the memory controller at the expense of creating more
 traffic on the PCI-E port.
-
+.PP
 Workloads that have a high CPU memory load and low PCI-E utilization
 will benefit from this feature, while workloads that have a high PCI-E
 utilization and small packets will be harmed.
-
+.PP
 For instance, with a 128 byte cache line size, the transfer of any
 packets less than 128 bytes will require a full 128 transfer on PCI,
 pontentially doubling the required PCI-E bandwith.
-
+.PP
 This feature can be enabled on a QP or WQ basis via the
 IBV_QP_CREATE_PCI_WRITE_END_PADDING or IBV_WQ_FLAGS_PCI_WRITE_END_PADDING
 flags.
-
 .SH "RETURN VALUE"
 .B ibv_query_device_ex()
 returns 0 on success, or the value of errno on failure (which indicates the failure reason).

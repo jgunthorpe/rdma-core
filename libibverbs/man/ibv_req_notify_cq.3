@@ -9,6 +9,7 @@ ibv_req_notify_cq \- request completion notification on a completion queue (CQ)
 .B #include <infiniband/verbs.h>
 .sp
 .BI "int ibv_req_notify_cq(struct ibv_cq " "*cq" ", int " "solicited_only" ");
+.fi
 .SH "DESCRIPTION"
 .B ibv_req_notify_cq()
 requests a completion notification on the completion queue (CQ)
@@ -28,8 +29,7 @@ completion for a message with the Solicited Event header bit set, or
 if the status is not successful.  All other successful receive
 completions, or any successful send completion is unsolicited.
 .SH "RETURN VALUE"
-.B 
-ibv_req_notify_cq()
+.B ibv_req_notify_cq()
 returns 0 on success, or the value of errno on failure (which indicates the failure reason).
 .SH "NOTES"
 The request for notification is "one shot."  Only one completion event
