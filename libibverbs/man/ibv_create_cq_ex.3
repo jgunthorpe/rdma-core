@@ -31,7 +31,7 @@ uint32_t                comp_mask;         /* compatibility mask (extended verb)
 uint32_t                flags              /* One or more flags from enum ibv_create_cq_attr_flags */
 .in -8
 };
-
+.sp
 enum ibv_wc_flags_ex {
         IBV_WC_EX_WITH_BYTE_LEN              = 1 << 0,  /* Require byte len in WC */
         IBV_WC_EX_WITH_IMM                   = 1 << 1,  /* Require immediate in WC */
@@ -44,22 +44,22 @@ enum ibv_wc_flags_ex {
         IBV_WC_EX_WITH_CVLAN                 = 1 << 8,  /* Require VLAN info in WC */
         IBV_WC_EX_WITH_FLOW_TAG		     = 1 << 9,  /* Require flow tag in WC */
 };
-
+.sp
 enum ibv_cq_init_attr_mask {
         IBV_CQ_INIT_ATTR_MASK_FLAGS             = 1 << 0,
 };
-
+.sp
 enum ibv_create_cq_attr_flags {
         IBV_CREATE_CQ_ATTR_SINGLE_THREADED      = 1 << 0, /* This CQ is used from a single threaded, thus no locking is required */
 };
-
+.fi
 .SH "Polling an extended CQ"
 In order to poll an extended CQ efficiently, a user could use the following functions.
-
 .TP
 .B Completion iterator functions
-
+.nf
 .BI "int ibv_start_poll(struct ibv_cq_ex " "*cq" ", struct ibv_poll_cq_attr " "*attr")
+.fi
 .br
 Start polling a batch of work completions.
 .I attr
@@ -68,8 +68,10 @@ easily extensible in the future. This function either returns 0 on success or an
 otherwise. When no completions are available on the CQ, ENOENT is returned, but the CQ remains
 in a valid state. On success, querying the completion's attribute could be done using the query
 functions described below. If an error code is given, end_poll shouldn't be called.
-
+.sp
+.nf
 .BI "int ibv_next_poll(struct ibv_cq_ex " "*cq")
+.fi
 .br
 This function is called in order to get the next work completion. It has to be called after
 .I start_poll
@@ -80,8 +82,10 @@ otherwise. When no completions are available on the CQ, ENOENT is returned, but 
 in a valid state. On success, querying the completion's attribute could be done using the query
 functions described below. If an error code is given, end_poll should still be called,
 indicating this is the end of the polled batch.
-
+.sp
+.nf
 .BI "void ibv_end_poll(struct ibv_cq_ex " "*cq")
+.fi
 .br
 This function indicates the end of polling batch of work completions. After calling this function, the user should start a new batch
 by calling

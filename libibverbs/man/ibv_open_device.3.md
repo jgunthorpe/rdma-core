@@ -1,0 +1,55 @@
+---
+date: 2006-10-31
+footer: libibverbs
+header: "Libibverbs Programmer's Manual"
+layout: page
+license: 'Licensed under the OpenIB.org BSD license (FreeBSD Variant) - See COPYING.md'
+section: 3
+title: IBV_OPEN_DEVICE
+---
+
+# NAME
+
+ibv_open_device, ibv_close_device - open and close an RDMA device context
+
+# SYNOPSIS
+
+```c
+#include <infiniband/verbs.h>
+
+struct ibv_context *ibv_open_device(struct ibv_device *device);
+
+int ibv_close_device(struct ibv_context *context);
+```
+
+# DESCRIPTION
+
+**ibv_open_device()** opens the device *device* and creates a context for
+further use.
+
+**ibv_close_device()** closes the device context *context*.
+
+# RETURN VALUE
+
+**ibv_open_device()** returns a pointer to the allocated device context, or
+NULL if the request fails.
+
+**ibv_close_device()** returns 0 on success, -1 on failure.
+
+# NOTES
+
+**ibv_close_device()** does not release all the resources allocated using
+context *context*. To avoid resource leaks, the user should release all
+associated resources before closing a context.
+
+# SEE ALSO
+
+**ibv_get_device_list**(3),
+**ibv_query_device**(3),
+**ibv_query_gid**(3),
+**ibv_query_pkey**(3),
+**ibv_query_port**(3)
+
+# AUTHOR
+
+Dotan Barak <dotanba@gmail.com>

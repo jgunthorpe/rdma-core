@@ -15,7 +15,7 @@ mlx4dv_init_obj \- Initialize mlx4 direct verbs object from ibv_xxx structures
 .B mlx4dv_init_obj()
 This function will initialize mlx4dv_xxx structs based on supplied type. The information
 for initialization is taken from ibv_xx structs supplied as part of input.
-
+.PP
 Request information of CQ marks its owned by direct verbs for all consumer index
 related actions. The initialization type can be combination of several types together.
 .PP
@@ -47,7 +47,7 @@ size_t          length;
 uint64_t        comp_mask;
 .in -8
 };
-
+.sp
 struct mlx4dv_cq {
 .in +8
 struct {
@@ -66,7 +66,7 @@ uint64_t        comp_mask; /* Use enum mlx4dv_cq_comp_mask */
 void            *cq_uar;
 .in -8
 };
-
+.sp
 struct mlx4dv_srq {
 .in +8
 struct {
@@ -82,7 +82,7 @@ uint32_t        *db;
 uint64_t        comp_mask;
 .in -8
 };
-
+.sp
 struct mlx4dv_rwq {
 .in +8
 __be32          *rdb;
@@ -102,7 +102,7 @@ size_t          length;
 uint64_t        comp_mask;
 .in -8
 };
-
+.sp
 struct mlx4dv_obj {
 .in +8
 struct {
@@ -119,7 +119,7 @@ struct mlx4dv_cq   *out;
 } cq;
 .in -8
 };
-
+.sp
 enum mlx4dv_obj_type {
 .in +8
 MLX4DV_OBJ_QP   = 1 << 0,
