@@ -186,21 +186,21 @@ Extended device capability flags (device_cap_flags_ex):
 :	Indicates the device has support for padding PCI writes to a full
 	cache line.
 
-Padding packets to full cache lines reduces the amount of traffic required at
-the memory controller at the expense of creating more traffic on the PCI-E
-port.
+	Padding packets to full cache lines reduces the amount of traffic required at
+	the memory controller at the expense of creating more traffic on the PCI-E
+	port.
 
-Workloads that have a high CPU memory load and low PCI-E utilization will
-benefit from this feature, while workloads that have a high PCI-E utilization
-and small packets will be harmed.
+	Workloads that have a high CPU memory load and low PCI-E utilization will
+	benefit from this feature, while workloads that have a high PCI-E utilization
+	and small packets will be harmed.
 
-For instance, with a 128 byte cache line size, the transfer of any packets
-less than 128 bytes will require a full 128 transfer on PCI, pontentially
-doubling the required PCI-E bandwith.
+	For instance, with a 128 byte cache line size, the transfer of any packets
+	less than 128 bytes will require a full 128 transfer on PCI, pontentially
+	doubling the required PCI-E bandwith.
 
-This feature can be enabled on a QP or WQ basis via the
-IBV_QP_CREATE_PCI_WRITE_END_PADDING or IBV_WQ_FLAGS_PCI_WRITE_END_PADDING
-flags.
+	This feature can be enabled on a QP or WQ basis via the
+	IBV_QP_CREATE_PCI_WRITE_END_PADDING or IBV_WQ_FLAGS_PCI_WRITE_END_PADDING
+	flags.
 
 # RETURN VALUE
 
