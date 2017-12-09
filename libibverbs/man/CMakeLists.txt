@@ -8,11 +8,11 @@ rdma_man_pages(
   ibv_create_ah_from_wc.3.md
   ibv_create_comp_channel.3.md
   ibv_create_cq.3.md
-  ibv_create_cq_ex.3
+  ibv_create_cq_ex.3.md
   ibv_modify_cq.3.md
-  ibv_create_flow.3
+  ibv_create_flow.3.md
   ibv_create_qp.3.md
-  ibv_create_qp_ex.3
+  ibv_create_qp_ex.3.md
   ibv_create_rwq_ind_table.3.md
   ibv_create_srq.3.md
   ibv_create_srq_ex.3.md
@@ -22,13 +22,13 @@ rdma_man_pages(
   ibv_event_type_str.3.md
   ibv_fork_init.3.md
   ibv_get_async_event.3.md
-  ibv_get_cq_event.3
+  ibv_get_cq_event.3.md
   ibv_get_device_guid.3.md
   ibv_get_device_list.3.md
   ibv_get_device_name.3.md
   ibv_get_srq_num.3.md
   ibv_inc_rkey.3.md
-  ibv_modify_qp.3
+  ibv_modify_qp.3.md
   ibv_modify_srq.3.md
   ibv_modify_wq.3.md
   ibv_open_device.3.md
