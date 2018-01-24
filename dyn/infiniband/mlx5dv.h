@@ -7,32 +7,17 @@
 #ifndef _INFINIBAND_DYN_MLX5DV_H
 #define _INFINIBAND_DYN_MLX5DV_H
 
-/*
- * Aided by:
- *  for I in `readelf -s --wide build/lib/libmlx5.so | grep @@MLX5 | awk '{split($8,a,"@@"); printf(" %s(\n",a[1])}' | sort -u`; do grep -A2 "$I" providers/mlx5/mlx5dv.h ; done
- */
+#define DECLARE_FNP(_fn) typeof(&_fn) _fn
 struct dyn_mlx5_ops {
-	struct ibv_cq_ex *(*mlx5dv_create_cq)(
-		struct ibv_context *context,
-		struct ibv_cq_init_attr_ex *cq_attr,
-		struct mlx5dv_cq_init_attr *mlx5_cq_attr);
-	struct ibv_qp *(*mlx5dv_create_qp)(
-		struct ibv_context *context,
-		struct ibv_qp_init_attr_ex *qp_attr,
-		struct mlx5dv_qp_init_attr *mlx5_qp_attr);
-	struct ibv_wq *(*mlx5dv_create_wq)(
-		struct ibv_context *context,
-		struct ibv_wq_init_attr *wq_init_attr,
-		struct mlx5dv_wq_init_attr *mlx5_wq_attr);
-	int (*mlx5dv_get_clock_info)(struct ibv_context *context,
-				     struct mlx5dv_clock_info *clock_info);
-	int (*mlx5dv_init_obj)(struct mlx5dv_obj *obj, uint64_t obj_type);
-	int (*mlx5dv_query_device)(struct ibv_context *ctx_in,
-				   struct mlx5dv_context *attrs_out);
-	int (*mlx5dv_set_context_attr)(struct ibv_context *context,
-				       enum mlx5dv_set_ctx_attr_type type,
-				       void *attr);
+	DECLARE_FNP(mlx5dv_create_cq);
+	DECLARE_FNP(mlx5dv_create_qp);
+	DECLARE_FNP(mlx5dv_create_wq);
+	DECLARE_FNP(mlx5dv_get_clock_info);
+	DECLARE_FNP(mlx5dv_init_obj);
+	DECLARE_FNP(mlx5dv_query_device);
+	DECLARE_FNP(mlx5dv_set_context_attr);
 };
+#undef DECLARE_FNP
 
 extern struct dyn_mlx5_ops _mlx5_ops;
 
