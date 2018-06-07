@@ -315,6 +315,8 @@ LATEST_SYMVER_FUNC(ibv_dereg_mr, 1_1, "IBVERBS_1.1",
 	return ret;
 }
 
+#include <assert.h>
+
 struct ibv_comp_channel *ibv_create_comp_channel(struct ibv_context *context)
 {
 	struct ibv_comp_channel            *channel;
@@ -326,6 +328,9 @@ struct ibv_comp_channel *ibv_create_comp_channel(struct ibv_context *context)
 		return NULL;
 
 	IBV_INIT_CMD_RESP(&cmd, sizeof cmd, CREATE_COMP_CHANNEL, &resp, sizeof resp);
+	/* Show what the in/out size of CREATE_COMP_CHANNEL is */
+	static_assert(sizeof(cmd) / 4 == 0x4, "Bad size");
+	static_assert(sizeof(resp) / 4 == 0x1, "bad size");
 	if (write(context->cmd_fd, &cmd, sizeof cmd) != sizeof cmd) {
 		free(channel);
 		return NULL;

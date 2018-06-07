@@ -264,7 +264,7 @@ struct mlx5_ib_create_cq {
 	__u32	cqe_size;
 	__u8    cqe_comp_en;
 	__u8    cqe_comp_res_format;
-	__u16	flags;
+	__u16	flags; /* See enum mlx5_ib_create_cq_flags */
 };
 
 struct mlx5_ib_create_cq_resp {

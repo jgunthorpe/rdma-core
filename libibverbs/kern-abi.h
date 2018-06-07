@@ -64,6 +64,9 @@ struct ex_hdr {
 #define IBV_KABI_REQ(_enum) _KABI_REQ_STRUCT_##_enum
 #define IBV_KABI_RESP(_enum) _KABI_RESP_STRUCT_##_enum
 
+#define IBV_KABI_DRV_REQ(_enum) _KABI_DRV_REQ_STRUCT_##_enum
+#define IBV_KABI_DRV_RESP(_enum) _KABI_DRV_RESP_STRUCT_##_enum
+
 #define IBV_ABI_ALIGN(_enum) _ABI_ALIGN_##_enum
 
 /*
@@ -151,6 +154,7 @@ struct empty {};
 			struct _kabi_req drv_payload;                          \
 		};                                                             \
 	};                                                                     \
+	typedef struct _kabi_req IBV_KABI_DRV_REQ(_enum);                      \
 	struct _name##_resp {                                                  \
 		IBV_KABI_RESP(_enum) ibv_resp;                                 \
 		union {                                                        \
@@ -158,6 +162,7 @@ struct empty {};
 			struct _kabi_resp drv_payload;                         \
 		};                                                             \
 	};                                                                     \
+	typedef struct _kabi_resp IBV_KABI_DRV_RESP(_enum);                    \
 	static_assert(sizeof(IBV_KABI_REQ(_enum)) %                            \
 				      __alignof__(struct _kabi_req) ==         \
 			      0,                                               \

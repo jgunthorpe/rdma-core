@@ -1,0 +1,1468 @@
+alloc_mw_resp {
+IB_USER_VERBS_CMD_ALLOC_MW_core_resp {
+	mw_handle	mw_handle
+	rkey		mr_rkey
+}
+
+alloc_mw_cmd {
+IB_USER_VERBS_CMD_ALLOC_MW_core {
+	command		const[0xe, int32]
+	in_words	const[0x6, int16]
+	out_words	const[0x2, int16]
+	response	ptr[out, alloc_mw_resp]
+	pd_handle	pd_handle
+	mw_type		int8[1:2]
+	reserved0	const[0x0, int8]
+	reserved1	const[0x0, int16]
+}
+
+mlx5_alloc_pd_cmd_resp {
+IB_USER_VERBS_CMD_ALLOC_PD_mlx5_resp {
+	pd_handle	pd_handle
+	pdn		int32
+}
+
+mlx5_alloc_pd_cmd {
+IB_USER_VERBS_CMD_ALLOC_PD_mlx5 {
+	command		const[0x3, int32]
+	in_words	bytesize4[parent, int16]
+	out_words	bytesize4[response, int16]
+	response	ptr[out, mlx5_alloc_pd_cmd_resp]
+	driver_data	array[int64]
+}
+
+IB_USER_VERBS_CMD_ATTACH_MCAST_core_resp {
+}
+
+attach_mcast_cmd {
+IB_USER_VERBS_CMD_ATTACH_MCAST_core {
+	command		const[0x1e, int32]
+	in_words	const[0x8, int16]
+	out_words	const[0x0, int16]
+	gid		array[int8, 0x10]
+	qp_handle	qp_handle
+	mlid		int16
+	reserved	const[0x0, int16]
+	driver_data	array[int64]
+}
+
+IB_USER_VERBS_CMD_CLOSE_XRCD_core_resp {
+}
+
+close_xrcd_cmd {
+IB_USER_VERBS_CMD_CLOSE_XRCD_core {
+	command		const[0x26, int32]
+	in_words	const[0x3, int16]
+	out_words	const[0x0, int16]
+	xrcd_handle	xrcd_handle
+}
+
+create_ah_cmd_resp {
+IB_USER_VERBS_CMD_CREATE_AH_mlx5_resp {
+	ah_handle	ah_handle
+}
+
+create_ah_cmd {
+IB_USER_VERBS_CMD_CREATE_AH_mlx5 {
+	command		const[0x5, int32]
+	in_words	bytesize4[parent, int16]
+	out_words	bytesize4[response, int16]
+	response	ptr[out, create_ah_cmd_resp]
+	user_handle	int64
+	pd_handle	pd_handle
+	reserved	const[0x0, int32]
+	dgid		array[int8, 16]
+	flow_label	int32
+	sgid_index	const[0x0, int8]
+	hop_limit	int8
+	traffic_class	int8
+	reserved1	int8
+	dlid		int16
+	sl		int8
+	src_path_bits	int8
+	static_rate	int8
+	is_global	int8
+	port_num	const[0x1, int8]
+	reserved2	int8
+}
+
+create_comp_channel_resp {
+IB_USER_VERBS_CMD_CREATE_COMP_CHANNEL_core_resp {
+	fd	int32
+}
+
+create_comp_channel_cmd {
+IB_USER_VERBS_CMD_CREATE_COMP_CHANNEL_core {
+	command		const[0x11, int32]
+	in_words	const[0x6, int16]
+	out_words	const[0x1, int16]
+	response	ptr[out, create_comp_channel_resp]
+}
+
+create_cq_resp {
+IB_USER_VERBS_CMD_CREATE_CQ_mlx5_resp {
+	cq_handle	cq_handle
+	cqe		int32
+}
+
+mlx5_create_cq_cmd {
+IB_USER_VERBS_CMD_CREATE_CQ_mlx5 {
+	command			const[0x12, int32]
+	in_words		bytesize4[parent, int16]
+	out_words		bytesize4[response, int16]
+	response		ptr[out, create_cq_resp]
+	user_handle		int64
+	cqe			int32
+	comp_vector		int32
+	comp_channel		const[0xffffffff, int32]
+	reserved		const[0x0, int32]
+	buf_addr		ptr[in, array[int8, 4096]]
+	db_addr			ptr[in, array[int8, 4096]]
+	cqe_size		flags[cqe_size_flags, int32]
+	cqe_comp_en		int8[0:1]
+	cqe_comp_res_format	flags[mlx5_comp_cqe_res_format, int8]
+	flags			flags[mlx5_create_cq_flags, int16]
+}
+
+mlx5_create_qp_resp {
+IB_USER_VERBS_CMD_CREATE_QP_mlx5_resp {
+	qp_handle	qp_handle
+	qpn		qp_number
+	max_send_wr	int32
+	max_recv_wr	int32
+	max_send_sge	int32
+	max_recv_sge	int32
+	max_inline_data	int32
+	reserved0	const[0x0, int32]
+	uuar_index	int32
+}
+
+mlx5_create_qp_cmd {
+IB_USER_VERBS_CMD_CREATE_QP_mlx5 {
+	command		const[0x18, int32]
+	in_words	bytesize4[parent, int16]
+	out_words	bytesize4[response, int16]
+	response	ptr[out, create_qp_resp]
+	user_handle	int64
+	pd_handle	pd_handle
+	send_cq_handle	cq_handle
+	recv_cq_handle	cq_handle
+	srq_handle	srq_handle
+	max_send_wr	int32
+	max_recv_wr	int32
+	max_send_sge	int32
+	max_recv_sge	int32
+	max_inline_data	int32
+	sq_sig_all	int8
+	qp_type		flags[ib_qp_type, int8]
+	is_srq		int8
+	reserved0	const[0x0, int8]
+	buf_addr	ptr[in, array[int8, 4096]]
+	db_addr		ptr[in, array[int8, 4096]]
+	sq_wqe_count	int32
+	rq_wqe_count	int32
+	rq_wqe_shift	int32
+	flags		flags[mlx5_create_qp_flags, int32]
+	uidx		int32
+	reserved1	const[0x0, int32]
+	sq_buf_addr	ptr[in, array[int8, 4096]]
+} [packed]
+
+IB_USER_VERBS_CMD_CREATE_QP_VERBS_v3_core_resp {
+}
+
+IB_USER_VERBS_CMD_CREATE_QP_VERBS_v3_core {
+}
+
+IB_USER_VERBS_CMD_CREATE_QP_VERBS_v4_core_resp {
+}
+
+IB_USER_VERBS_CMD_CREATE_QP_VERBS_v4_core {
+}
+
+mlx5_ib_create_srq_resp {
+IB_USER_VERBS_CMD_CREATE_SRQ_mlx5_resp {
+	srqn		int32
+	reserved	const[0x0, int32]
+}
+
+mlx5_create_srq_cmd {
+IB_USER_VERBS_CMD_CREATE_SRQ_mlx5 {
+	command		const[0x27, int32]
+	in_words	const[0x16, int16]
+	out_words	const[0x6, int16]
+	reserved0	const[0x0, int32]
+	response	ptr[out, mlx5_ib_create_srq_resp]
+	user_handle	int64
+	srq_type	flags[srq_type, int32]
+	pd_handle	pd_handle
+	max_wr		int32
+	max_sge		int32
+	srq_limit	int32
+	max_num_tags	int32
+	xrcd_handle	xrcd_handle
+	cq_handle	cq_handle
+	buf_addr	ptr[in, int64]
+	db_addr		ptr[in, int64]
+	flags		flags[create_srq_ex_flags, int32]
+	reserved1	const[0x0, int32]
+	uidx		int32
+	reserved2	const[0x0, int32]
+}
+
+IB_USER_VERBS_CMD_CREATE_SRQ_VERBS_v5_core_resp {
+}
+
+IB_USER_VERBS_CMD_CREATE_SRQ_VERBS_v5_core {
+}
+
+create_srq_resp {
+IB_USER_VERBS_CMD_CREATE_XSRQ_mlx5_resp {
+	srq_handle	srq_handle
+	max_wr		int32
+	max_sge		int32
+	srqn		int32
+}
+
+create_xsrq_cmd {
+IB_USER_VERBS_CMD_CREATE_XSRQ_mlx5 {
+	command		const[0x27, int32]
+	in_words	const[0xd, int16]
+	out_words	const[0x4, int16]
+	response	ptr[out, create_srq_resp]
+	user_handle	int64
+	pd_handle	pd_handle
+	max_wr		int32
+	max_sge		int32
+	srq_limit	int32
+	reserved	const[0x0, int32]
+	xrcd_handle	xrcd_handle
+	cq_handle	cq_handle
+	driver_data	array[int64]
+}
+
+IB_USER_VERBS_CMD_DEALLOC_MW_core_resp {
+}
+
+dealloc_mw_cmd {
+IB_USER_VERBS_CMD_DEALLOC_MW_core {
+	command		const[0x10, int32]
+	in_words	const[0x4, int16]
+	out_words	const[0x0, int16]
+	mw_handle	mw_handle
+	reserved	const[0x0, int32]
+}
+
+dealloc_pd_cmd {
+IB_USER_VERBS_CMD_DEALLOC_PD_core {
+	command		const[0x4, int32]
+	in_words	const[0x6, int16]
+	out_words	const[0x0, int16]
+	pd_handle	pd_handle
+}
+
+dereg_mr_cmd {
+IB_USER_VERBS_CMD_DEREG_MR_core {
+	command		const[0xd, int32]
+	in_words	const[0x3, int16]
+	out_words	const[0x0, int16]
+	mr_handle	mr_handle
+}
+
+destroy_ah_cmd {
+IB_USER_VERBS_CMD_DESTROY_AH_core {
+	command		const[0x8, int32]
+	in_words	bytesize4[parent, int16]
+	out_words	const[0x0, int16]
+}
+
+query_port_cmd {
+IB_USER_VERBS_CMD_QUERY_PORT_core {
+	command		const[0x2, int32]
+	in_words	const[0x6, int16]
+	out_words	const[0xa, int16]
+	response	int64
+	port_num	const[0x1, int8]
+	reserved	array[int8, 7]
+	driver_data	array[int64]
+}
+
+mlx5_get_context_cmd_resp {
+IB_USER_VERBS_CMD_GET_CONTEXT_mlx5_resp {
+	async_fd			int32
+	num_comp_vectors		int32
+	qp_tab_size			int32
+	bf_reg_size			int32
+	tot_uuars			int32
+	cache_line_size			int32
+	max_sq_desc_sz			int16
+	max_rq_desc_sz			int16
+	max_send_wqebb			int32
+	max_recv_wr			int32
+	max_srq_recv_wr			int32
+	num_ports			int16
+	reserved1			const[0x0, int16]
+	comp_mask			int32[0:1]
+	response_length			int32
+	cqe_version_cmds_supp_uhw	int16
+	reserved2			const[0x0, int16]
+	hca_core_clock_offset		int64
+	log_uar_size			int32
+	num_uars_per_page		int32
+	num_dyn_bfregs			int32
+	reserved3			const[0x0, int32]
+}
+
+# using MLX5_CQE_VERSION_V1
+mlx5_get_context_cmd_success {
+IB_USER_VERBS_CMD_GET_CONTEXT_mlx5 {
+	command			const[0x0, int32]
+	in_words		bytesize4[parent, int16]
+	out_words		bytesize4[response, int16]
+	response		ptr[out, mlx5_get_context_cmd_resp]
+	total_num_uuars		const[0x10, int32]
+	num_low_latency_uuars	const[0x4, int32]
+	flags			const[0x0, int32]
+	comp_mask		const[0x0, int32]
+	cqe_version		const[0x1, int8]
+	reserved1		const[0x0, int8]
+	reserved2		const[0x0, int16]
+	reserved3		const[0x0, int32]
+	lib_caps		const[MLX5_LIB_CAP_4K_UAR, int64]
+}
+
+query_device_resp_ex {
+IB_USER_VERBS_EX_CMD_QUERY_DEVICE_mlx5_resp {
+	fw_ver				int64
+	node_guid			int64
+	sys_image_guid			int64
+	max_mr_size			int64
+	page_size_cap			int64
+	vendor_id			int32
+	vendor_part_id			int32
+	hw_ver				int32
+	max_qp				int32
+	max_qp_wr			int32
+	device_cap_flags		int32
+	max_sge				int32
+	max_sge_rd			int32
+	max_cq				int32
+	max_cqe				int32
+	max_mr				int32
+	max_qp_rd_atom			int32
+	max_ee_rd_atom			int32
+	max_res_rd_atom			int32
+	max_qp_init_rd_atom		int32
+	max_ee_init_rd_atom		int32
+	atomic_cap			int32
+	max_ee				int32
+	max_rdd				int32
+	max_mw				int32
+	max_raw_ipv6_qp			int32
+	max_raw_ethy_qp			int32
+	max_mcast_grp			int32
+	max_mcast_qp_attach		int32
+	max_total_mcast_qp_attach	int32
+	max_ah				int32
+	max_fmr				int32
+	max_map_per_fmr			int32
+	max_srq				int32
+	max_srq_wr			int32
+	max_srq_sge			int32
+	max_pkeys			int16
+	local_ca_ack_delay		int8
+	phys_port_cnt			int8
+	reserved			const[0x0, int32]
+	comp_mask			const[0x0, int32]
+	response_length			int32
+	general_caps			int64
+	rc_odp_caps			int32
+	uc_odp_caps			int32
+	ud_odp_caps			int32
+	reserved_odp			const[0x0, int32]
+	timestamp_mask			int64
+	hca_core_clock			int64
+	device_cap_flags_ex		int64
+	supported_qpts			int32
+	max_rwq_indirection_tables	int32
+	max_rwq_indirection_table_size	int32
+	reserved_rss			const[0x0, int32]
+	max_wq_type_rq			int32
+	raw_packet_caps			int32
+}
+
+query_device_cmd_ex {
+IB_USER_VERBS_EX_CMD_QUERY_DEVICE_mlx5 {
+	command			const[IB_USER_VERBS_EX_CMD_QUERY_DEVICE, int32]
+	in_words		const[0x1, int16]
+	out_words		const[0x20, int16]
+	response		ptr[out, query_device_resp_ex]
+	provider_in_words	const[0x0, int16]
+	provider_out_words	const[0x8, int16]
+	reserved		const[0x0, int32]
+	comp_mask		const[0x0, int32]
+	reserved1		const[0x0, int32]
+}
+
+get_context_cmd_resp {
+	async_fd		int32
+	num_comp_vectors	int32
+}
+
+get_context_cmd {
+	command		const[0x0, int32]
+	in_words	const[0xc, int16]
+	out_words	const[0x12, int16]
+	response	ptr[out, get_context_cmd_resp]
+	driver_data	array[int64]
+}
+
+
+mlx5_get_context_cmd {
+	command			const[0x0, int32]
+	in_words		const[0xc, int16]
+	out_words		const[0x12, int16]
+	response		ptr[out, mlx5_get_context_cmd_resp]
+	total_num_uuars		int32
+	num_low_latency_uuars	int32
+	flags			int32
+	comp_mask		int32
+	cqe_version		int16
+	reserved1		const[0x0, int16]
+	reserved2		const[0x0, int32]
+	lib_caps		int64
+}
+
+
+# query_device
+# ================
+
+
+# query_port
+# ==============
+
+# pd
+# ======
+
+alloc_pd_cmd {
+	command		const[0x3, int32]
+	in_words	bytesize4[parent, int16]
+	out_words	bytesize4[response, int16]
+	response	ptr[out, alloc_pd_cmd_resp]
+	driver_data	array[int64]
+}
+
+alloc_pd_cmd_resp {
+	pd_handle	pd_handle
+}
+
+
+# ah
+# ===
+
+# mr
+# ======
+
+reg_mr_resp {
+	mr_handle	mr_handle
+	lkey		mr_lkey
+	rkey		mr_rkey
+}
+
+reg_mr_cmd {
+	command		const[0x9, int32]
+	in_words	const[0xc, int16]
+	out_words	const[0x3, int16]
+	response	ptr[out, reg_mr_resp]
+	start		ptr[in, int64]
+	length		len[start, int64]
+	hca_va		ptr[inout, int64]
+	pd_handle	pd_handle
+	access_flags	flags[ib_access_flags, int32]
+	driver_data	array[int64]
+}
+
+rereg_mr_resp {
+	lkey	mr_lkey
+	rkey	mr_rkey
+}
+
+rereg_mr_cmd {
+	command		const[0xb, int32]
+	in_words	const[0xe, int16]
+	out_words	const[0x2, int16]
+	response	ptr[out, rereg_mr_resp]
+	mr_handle	mr_handle
+	flags		flags[ib_mr_rereg_flags, int32]
+	start		ptr[in, int64]
+	length		len[start, int64]
+	hca_va		ptr[inout, int64]
+	pd_handle	pd_handle
+	access_flags	flags[ib_access_flags, int32]
+	driver_data	array[int64]
+}
+
+# completion channel
+# ==================
+
+
+# cq
+# ======
+
+
+# this fails a lot on Mellanox HW. Leaving for others' sake, but we'll use
+# mlx5_create_cq instead, which defines driver data properly.
+create_cq_cmd {
+	command		const[0x12, int32]
+	in_words	const[0x10, int16]
+	out_words	const[0x3, int16]
+	reponse		ptr[out, create_cq_resp]
+	user_handle	int64
+	cqe		int32
+	comp_vector	int32
+	comp_channel	int32
+	reserved	const[0x0, int32]
+	driver_data	array[int64]
+}
+
+create_cq_ex_cmd {
+	command			const[0x12, int32]
+	in_words		bytesize8[parent, int16]
+	out_words		const[0x2, int16]
+	response		ptr[out, create_flow_resp]
+	provider_in_words	const[0x0, int16]
+	provider_out_words	const[0x0, int16]
+	reserved0		const[0x0, int32]
+	user_handle		int64
+	cqe			int32
+	comp_vector		int32
+	comp_channel		int32
+	comp_mask		flags[create_cq_ex_mask, int32]
+	flags			flags[create_cq_ex_flags, int32]
+	reserved1		const[0x0, int32]
+}
+
+resize_cq_cmd {
+	command		const[0x13, int32]
+	in_words	const[0xa, int16]
+	out_words	const[0x2, int16]
+	response	ptr[out, resize_cq_resp]
+	cq_handle	cq_handle
+	cqe		int32
+	driver_data	array[int64]
+}
+
+resize_cq_resp {
+	cqe		int32
+	reserved	const[0x0, int32]
+	driver_data	array[int64]
+}
+
+destroy_cq_resp {
+	comp_events_reported	int32
+	async_events_reported	int32
+}
+
+destroy_cq_cmd {
+	command		const[0x14, int32]
+	in_words	const[0x6, int16]
+	out_words	const[0x2, int16]
+	response	ptr[out, destroy_cq_resp]
+	cq_handle	cq_handle
+	reserved	const[0x0, int32]
+}
+
+poll_cq_cmd {
+	command		const[0x15, int32]
+	in_words	const[0x6, int16]
+	out_words	const[0x2, int16]
+	response	ptr[out, poll_cq_resp]
+	cq_handle	cq_handle
+	ne		int32
+}
+
+kern_wc {
+	wr_id		int64
+	status		int32
+	opcode		int32
+	vendor_err	int32
+	byte_len	int32
+	imm_data	int32
+	qp_num		int32
+	src_qp		int32
+	wc_flags	int32
+	pkey_index	int16
+	slid		int16
+	sl		int8
+	dlid_path_bits	int8
+	port_num	int8
+	reserved	const[0x0, int8]
+}
+
+poll_cq_resp {
+	count		int32
+	reserved	const[0x0, int32]
+	wc		array[kern_wc]
+}
+
+req_notify_cq_cmd {
+	command		const[0x17, int32]
+	in_words	const[0x4, int16]
+	out_words	const[0x0, int16]
+	cq_handle	cq_handle
+	solicited	int32[0x0:0x1]
+}
+
+# qp_ex
+# =========
+
+create_qp_resp {
+	qp_handle	qp_handle
+	qpn		qp_number
+	max_send_wr	int32
+	max_recv_wr	int32
+	max_send_sge	int32
+	max_recv_sge	int32
+	max_inline_data	int32
+	reserved	const[0x0, int32]
+}
+
+
+create_qp_cmd {
+	command		const[0x18, int32]
+	in_words	bytesize4[parent, int16]
+	out_words	bytesize4[response, int16]
+	response	ptr[out, create_qp_resp]
+	user_handle	int64
+	pd_handle	pd_handle
+	send_cq_handle	cq_handle
+	recv_cq_handle	cq_handle
+	srq_handle	srq_handle
+	max_send_wr	int32
+	max_recv_wr	int32
+	max_send_sge	int32
+	max_recv_sge	int32
+	max_inline_data	int32
+	sq_sig_all	int8
+	qp_type		flags[ib_qp_type, int8]
+	is_srq		int8
+	reserved1	const[0x0, int8]
+	driver_data	array[int64]
+}
+
+
+mlx5_create_dv_qp_cmd {
+	command		const[0x18, int32]
+	in_words	const[0x1c, int16]
+	out_words	const[0x9, int16]
+	response	ptr[out, mlx5_create_qp_resp]
+	user_handle	int64
+	pd_handle	pd_handle
+	send_cq_handle	cq_handle
+	recv_cq_handle	cq_handle
+	srq_handle	srq_handle
+	max_send_wr	int32
+	max_recv_wr	int32
+	max_send_sge	int32
+	max_recv_sge	int32
+	max_inline_data	int32
+	sq_sig_all	int8
+	qp_type		const[0xff, int8]
+	is_srq		int8
+	reserved0	const[0x0, int8]
+	driver_data	array[int64]
+	buf_addr	ptr[in, array[int8, 4096]]
+	db_addr		ptr[in, array[int8, 4096]]
+	sq_wqe_count	int32
+	rq_wqe_count	int32
+	rq_wqe_shift	int32
+	flags		int32
+	uidx		int32
+	reserved1	const[0x0, int32]
+	access_key	int64
+} [packed]
+
+destroy_qp_resp {
+	events_reported	int32
+}
+
+destroy_qp_cmd {
+	command		const[0x1b, int32]
+	in_words	const[0x6, int16]
+	out_words	const[0x1, int16]
+	response	ptr[out, destroy_qp_resp]
+	qp_handle	qp_handle
+	reserved	const[0x0, int32]
+}
+
+query_qp_resp {
+	dest_dgid		array[int8, 16]
+	dest_flow_label		int32
+	dest_dlid		int16
+	dest_reserved		const[0x0, int16]
+	dest_sgid_index		int8
+	dest_hop_limit		int8
+	dest_traffic_class	int8
+	dest_sl			int8
+	dest_src_path_bits	int8
+	dest_static_rate	int8
+	dest_is_global		int8
+	dest_port_num		int8
+	alt_dest_dgid		array[int8, 16]
+	alt_dest_flow_label	int32
+	alt_dest_dlid		int16
+	alt_dest_reserved	const[0x0, int16]
+	alt_dest_sgid_index	int8
+	alt_dest_hop_limit	int8
+	alt_dest_traffic_class	int8
+	alt_dest_sl		int8
+	alt_dest_src_path_bits	int8
+	alt_dest_static_rate	int8
+	alt_dest_is_global	int8
+	alt_dest_port_num	int8
+	max_send_wr		int32
+	max_recv_wr		int32
+	max_send_sge		int32
+	max_recv_sge		int32
+	max_inline_data		int32
+	qkey			int32
+	rq_psn			int32
+	sq_psn			int32
+	dest_qp_num		int32
+	qp_access_flags		int32
+	pkey_index		int16
+	alt_pkey_index		int16
+	qp_state		int8
+	cur_qp_state		int8
+	path_mtu		int8
+	path_mig_state		int8
+	sq_draining		int8
+	max_rd_atomic		int8
+	max_dest_rd_atomic	int8
+	min_rnr_timer		int8
+	port_num		int8
+	timeout			int8
+	retry_cnt		int8
+	rnr_retry		int8
+	alt_port_num		int8
+	alt_timeout		int8
+	sq_sig_all		int8
+	reserved0		const[0x0, int8]
+	reserved1		const[0x0, int32]
+	driver_data		array[int64]
+}
+
+query_qp_cmd {
+	command		const[0x19, int32]
+	in_words	const[0x6, int16]
+	out_words	const[0x20, int16]
+	response	ptr[out, query_qp_resp]
+	qp_handle	qp_handle
+	attr_mask	flags[ib_qp_create_flags, int32]
+	driver_data	array[int64]
+}
+
+modify_qp_cmd {
+	command			const[0x1a, int32]
+	in_words		const[0x1e, int16]
+	out_words		const[0x0, int16]
+	dest_dgid		array[int8, 16]
+	dest_flow_label		int32
+	dest_dlid		int16
+	dest_reserved		int16
+	dest_sgid_index		int8
+	dest_hop_limit		int8
+	dest_traffic_class	int8
+	dest_sl			int8
+	dest_src_path_bits	int8
+	dest_static_rate	int8
+	dest_is_global		int8
+	dest_port_num		int8
+	alt_dest_dgid		array[int8, 16]
+	alt_dest_flow_label	int32
+	alt_dest_dlid		int16
+	alt_dest_reserved	int16
+	alt_dest_sgid_index	int8
+	alt_dest_hop_limit	int8
+	alt_dest_traffic_class	int8
+	alt_dest_sl		int8
+	alt_dest_src_path_bits	int8
+	alt_dest_static_rate	int8
+	alt_dest_is_global	int8
+	alt_dest_port_num	int8
+	qp_handle		int32
+	attr_mask		int32
+	qkey			int32
+	rq_psn			int32
+	sq_psn			int32
+	dest_qp_num		int32
+	qp_access_flags		int32
+	pkey_index		int16
+	alt_pkey_index		int16
+	qp_state		int8
+	cur_qp_state		int8
+	path_mtu		int8
+	path_mig_state		int8
+	en_sqd_async_notify	int8
+	max_rd_atomic		int8
+	max_dest_rd_atomic	int8
+	min_rnr_timer		int8
+	port_num		int8
+	timeout			int8
+	retry_cnt		int8
+	rnr_retry		int8
+	alt_port_num		int8
+	alt_timeout		int8
+	reserved		const[0x0, int16]
+}
+
+modify_qp_resp_ex {
+	comp_mask	int32
+	response_length	int32
+}
+
+# wq
+#====
+
+create_wq_resp {
+	comp_mask	int32
+	response_length	int32
+	wq_handle	wq_handle
+	max_wr		int32
+	max_sge		int32
+	wqn		int32
+}
+
+mlx5_create_wq_resp {
+	comp_mask		int32
+	response_length		const[0x6, int32]
+	wq_handle		wq_handle
+	max_wr			int32
+	max_sge			int32
+	wqn			int32
+	mlx5_response_length	bytesize4[parent, int32]
+	reserver		const[0x0, int32]
+}
+
+create_wq_cmd {
+	command			const[0x80000034, int32]
+	in_words		const[0x5, int16]
+	out_words		bytesize4[response, int16]
+	response		ptr[out, create_wq_resp]
+	provider_in_words	const[0x6, int16]
+	provider_out_words	const[0x1, int16]
+	cmd_hdr_reserved	const[0x0, int32]
+	comp_mask		const[0x0, int32]
+	wq_type			flags[wq_type, int32]
+	user_handle		int64
+	pd_handle		pd_handle
+	cq_handle		cq_handle
+	max_wr			int32
+	max_sge			int32
+	create_flags		flags[create_wq_flags, int32]
+	reserved		const[0x0, int32]
+}
+
+mlx5_create_wq_cmd {
+	command				const[0x80000034, int32]
+	in_words			const[0x5, int16]
+	out_words			bytesize4[response, int16]
+	response			ptr[out, mlx5_create_wq_resp]
+	provider_in_words		const[0x6, int16]
+	provider_out_words		const[0x1, int16]
+	cmd_hdr_reserved		const[0x0, int32]
+	comp_mask			const[0x0, int32]
+	wq_type				flags[wq_type, int32]
+	user_handle			int64
+	pd_handle			pd_handle
+	cq_handle			cq_handle
+	max_wr				int32
+	max_sge				int32
+	create_flags			flags[create_wq_flags, int32]
+	reserved			const[0x0, int32]
+	buf_addr			ptr[in, array[int8, 4096]]
+	db_addr				ptr[in, array[int8, 4096]]
+	rq_wqe_count			int32
+	rq_wqe_shift			int32
+	user_index			int32
+	flags				const[0x0, int32]
+	provider_comp_mask		const[0x0, int32]
+	single_stride_log_num_of_bytes	const[0x0, int32]
+	single_wqe_log_num_of_strides	const[0x0, int32]
+	two_byte_shift_en		int32[0:1]
+}
+
+destroy_wq_resp {
+	comp_mask	int32
+	response_length	int32
+	events_reported	int32
+	reserved	const[0x0, int32]
+}
+
+destroy_wq_cmd {
+	command			const[0x80000036, int32]
+	in_words		const[0x1, int16]
+	out_words		const[0x2, int16]
+	response		ptr[out, destroy_wq_resp]
+	provider_in_words	const[0x0, int16]
+	provider_out_words	const[0x0, int16]
+	cmd_hdr_reserved	const[0x0, int32]
+	comp_mask		int32[0x0:0xf]
+	wq_handle		wq_handle
+}
+
+modify_wq_cmd {
+	command			const[0x80000035, int32]
+	in_words		const[0x3, int16]
+	out_words		const[0x0, int16]
+	response		const[0x0, int64]
+	provider_in_words	const[0x1, int16]
+	provider_out_words	const[0x0, int16]
+	cmd_hdr_reserved	const[0x0, int32]
+	attr_mask		int32
+	wq_handle		wq_handle
+	wq_state		int32[0:3]
+	current_wq_state	int32[0:3]
+	flags			flags[modify_wq_flags, int32]
+	flags_mask		flags[modify_wq_flags, int32]
+}
+
+mlx5_modify_wq_cmd {
+	command			const[0x80000035, int32]
+	in_words		const[0x3, int16]
+	out_words		const[0x0, int16]
+	response		const[0x0, int64]
+	provider_in_words	const[0x1, int16]
+	provider_out_words	const[0x0, int16]
+	cmd_hdr_reserved	const[0x0, int32]
+	attr_mask		flags[modify_wq_attr_flags, int32]
+	wq_handle		wq_handle
+	wq_state		int32[0:3]
+	current_wq_state	int32[0:3]
+	flags			flags[modify_wq_flags, int32]
+	flags_mask		flags[modify_wq_flags, int32]
+	comp_mask		const[0x0, int32]
+	reserved		const[0x0, int32]
+}
+
+# RSS (indirection table)
+#========================
+
+create_rwq_ind_table_resp {
+	comp_mask	int32
+	response_length	bytesize4[parent, int32]
+	ind_tbl_handle	ind_tbl_handle
+	ind_tbl_num	int32
+}
+
+# currently hard coded to use 2 WQs. Need to figure out how to 
+# make it a variable.
+create_rwq_ind_table_cmd {
+	command			const[0x80000037, int32]
+	in_words		const[0x2, int16]
+	out_words		const[0x2, int16]
+	response		ptr[out, create_rwq_ind_table_resp]
+	provider_in_words	const[0x0, int16]
+	provider_out_words	const[0x0, int16]
+	cmd_hdr_reserved	const[0x0, int32]
+	comp_mask		const[0x0, int32]
+	log_ind_tbl_size	int32[1]
+	wq_handles		array[wq_handle, 2]
+}
+
+destroy_rwq_ind_table_cmd {
+	comp_mask	int32
+	ind_tbl_handle	ind_tbl_handle
+}
+
+# Send WR
+#========
+
+rdma {
+	remote_addr	int64
+	rkey		mr_rkey
+	reserved	const[0x0, int32]
+}
+
+atomic {
+	remote_addr	int64
+	compare_add	int64
+	swap		int64
+	rkey		mr_rkey
+	reserved	const[0x0, int32]
+}
+
+ud {
+	ah		int32
+	remote_qpn	int32
+	remote_qkey	int32
+	reserved	const[0x0, int32]
+}
+
+xrc {
+	remote_srqn	int32
+}
+
+wr [
+	rdma	rdma
+	atomic	atomic
+	ud	ud
+]
+
+kern_send_wr {
+	wr_id		int64
+	num_sge		int32
+	opcode		int32[0:20]
+	send_flags	flags[ib_send_flags, int32]
+	imm_data	int32
+	wr		wr
+	qp_type		xrc
+}
+
+post_send_cmd {
+	command		const[0x1c, int32]
+	in_words	const[0x8, int16]
+	out_words	const[0x1, int16]
+	response	ptr[out, post_send_resp]
+	qp_handle	qp_handle
+	wr_count	int32
+	sge_count	int32
+	wqe_size	int32
+	send_wr		array[kern_send_wr]
+}
+
+post_send_resp {
+	bad_wr	int32
+}
+
+post_recv_cmd {
+	command		const[0x1d, int32]
+	in_words	const[0x8, int16]
+	out_words	const[0x1, int16]
+	response	ptr[out, post_recv_resp]
+	qp_handle	qp_handle
+	wr_count	int32
+	sge_count	int32
+	wqe_size	int32
+	recv_wr		array[kern_recv_wr]
+}
+
+post_recv_resp {
+	bad_wr	int32
+}
+
+detach_mcast_cmd {
+	command		const[0x1f, int32]
+	in_words	const[0x8, int16]
+	out_words	const[0x0, int16]
+	gid		array[int8, 0x10]
+	qp_handle	qp_handle
+	mlid		int16
+	reserved	const[0x0, int16]
+	driver_data	array[int64]
+}
+
+create_srq_cmd {
+	command		const[0x20, int32]
+	in_words	const[0xa, int16]
+	out_words	const[0x4, int16]
+	response	ptr[out, create_srq_resp]
+	user_handle	int64
+	pd_handle	pd_handle
+	max_wr		int32
+	max_sge		int32
+	srq_limit	int32
+	driver_data	array[int64]
+}
+
+
+modify_srq_cmd {
+	command		const[0x21, int32]
+	in_words	const[0x6, int16]
+	out_words	const[0x0, int16]
+	srq_handle	srq_handle
+	attr_mask	int32[0x0:0x10]
+	max_wr		int32
+	srq_limit	int32
+	driver_data	array[int64]
+}
+
+query_srq_cmd {
+	command		const[0x22, int32]
+	in_words	const[0x6, int16]
+	out_words	const[0x4, int16]
+	response	ptr[out, query_srq_resp]
+	srq_handle	srq_handle
+	reserved	const[0x0, int32]
+	driver_data	array[int64]
+}
+
+query_srq_resp {
+	max_wr		int32
+	max_sge		int32
+	srq_limit	int32
+	reserved	const[0x0, int32]
+}
+
+destroy_srq_cmd {
+	command		const[0x23, int32]
+	in_words	const[0x6, int16]
+	out_words	const[0x1, int16]
+	response	ptr[out, destroy_srq_resp]
+	srq_handle	srq_handle
+	reserved	const[0x0, int32]
+}
+
+destroy_srq_resp {
+	events_reported	int32
+}
+
+kern_recv_wr {
+	wr_id		int64
+	num_sge		int32
+	reserved	const[0x0, int32]
+}
+
+post_srq_recv_cmd {
+	command		const[0x24, int32]
+	in_words	const[0x7, int16]
+	out_words	const[0x1, int16]
+	response	ptr[out, post_srq_recv_resp]
+	wr_count	int32
+	sge_count	int32
+	wqe_size	int32
+	recv_wr		array[kern_recv_wr]
+}
+
+post_srq_recv_resp {
+	bad_wr	int32
+}
+
+open_xrcd_cmd {
+	command		const[0x25, int32]
+	in_words	const[0x6, int16]
+	out_words	const[0x1, int16]
+	response	ptr[out, open_xrcd_resp]
+	fd		int32
+	oflags		int32
+	driver_data	array[int64]
+}
+
+open_xrcd_resp {
+	xrcd_handle	xrcd_handle
+}
+
+open_qp_cmd {
+	command		const[0x28, int32]
+	in_words	const[0xa, int16]
+	out_words	const[0x9, int16]
+	response	ptr[out, create_qp_resp]
+	user_handle	int64
+	pd_handle	pd_handle
+	qpn		qp_number
+	qp_type		flags[ib_qp_type, int8]
+	reserved0	const[0x0, int32]
+	reserved1	const[0x0, int16]
+	reserved2	const[0x0, int8]
+	driver_data	array[int64]
+}
+
+# create_flow
+# ===============
+
+create_flow_resp {
+	comp_mask	int32
+	flow_handle	flow_handle
+}
+
+#uverbs_flow_spec_hdr {
+#	type int32
+#	size int16
+#	reserved int16
+#	flow_spec_data
+#}
+
+ib_flow_eth_filter {
+	dst_mac		array[int8, 0x6]
+	src_mac		array[int8, 0x6]
+	ether_type	int16
+	vlan_tag	int16
+}
+
+ib_flow_spec_eth {
+	type		const[IB_FLOW_SPEC_ETH, int32]
+	size		const[0x10, int16]
+	reserved	const[0x0, int16]
+	val		ib_flow_eth_filter
+	mask		ib_flow_eth_filter
+}
+
+ib_flow_ib_filter {
+	dlid		int16
+	sl		int8
+	reserved	const[0x0, int8]
+}
+
+ib_flow_spec_ib {
+	type		const[IB_FLOW_SPEC_IB, int32]
+	size		const[0x4, int16]
+	reserved	const[0x0, int16]
+	val		ib_flow_ib_filter
+	mask		ib_flow_ib_filter
+}
+
+ib_flow_ipv4_filter {
+	src_ip	int32
+	dst_ip	int32
+	proto	int8
+	tos	int8
+	ttl	int8
+	flags	flags[ib_ipv4_flags, int8]
+}
+
+ib_flow_spec_ipv4 {
+	type		const[IB_FLOW_SPEC_IPV4, int32]
+	size		const[0xc, int16]
+	reserved	const[0x0, int16]
+	val		ib_flow_ipv4_filter
+	mask		ib_flow_ipv4_filter
+}
+
+ib_flow_ipv6_filter {
+	src_ip		array[int8, 0x10]
+	dst_ip		array[int8, 0x10]
+	flow_label	int32
+	next_hdr	int8
+	traffic_class	int8
+	hop_limit	int8
+	reserved	const[0x0, int8]
+}
+
+ib_flow_spec_ipv6 {
+	type		const[IB_FLOW_SPEC_IPV6, int32]
+	size		const[0x28, int16]
+	reserved	const[0x0, int16]
+	val		ib_flow_ipv6_filter
+	mask		ib_flow_ipv6_filter
+}
+
+ib_flow_tcp_udp_filter {
+	dst_port	int16
+	src_port	int16
+}
+
+ib_flow_spec_tcp_udp {
+	type		int32[0x40:0x41]
+	size		const[0x4, int16]
+	reserved	const[0x0, int16]
+	val		ib_flow_tcp_udp_filter
+	mask		ib_flow_tcp_udp_filter
+}
+
+ib_flow_esp_filter {
+	spi	int32
+	seq	int32
+}
+
+#ib_flow_spec_esp {
+#        type const[IB_FLOW_SPEC_ESP, int32]
+#        size bytesize[parent, int16]
+#        reserved const[0x0, int16]
+#        val ib_flow_esp_filter
+#        mask ib_flow_esp_filter
+#}
+
+ib_flow_tunnel_filter {
+	tunnel_id	int32
+}
+
+ib_flow_spec_tunnel {
+	type		const[IB_FLOW_SPEC_VXLAN_TUNNEL, int32]
+	size		const[0x4, int16]
+	reserved	const[0x0, int16]
+	val		ib_flow_tunnel_filter
+	mask		ib_flow_tunnel_filter
+}
+
+ib_flow_spec_action_tag {
+	type		const[IB_FLOW_SPEC_ACTION_TAG, int32]
+	size		const[0x10, int16]
+	reserved	const[0x0, int16]
+	tag_id		int32
+	reserved2	const[0x0, int32]
+}
+
+ib_flow_spec_action_drop {
+	type		const[IB_FLOW_SPEC_ACTION_DROP, int32]
+	size		const[0x8, int16]
+	reserved	const[0x0, int16]
+}
+
+#ib_flow_spec_action_handle {
+#        type const[IB_FLOW_SPEC_ACTION_HANDLE, int32]
+#        size bytesize[parent, int16]
+#        reserved const[0x0, int16]
+#        handle flow_action_handle
+#        reserved1 const[0x0, int32]
+#}
+
+union_ib_flow_spec [
+	eth		ib_flow_spec_eth
+	ib		ib_flow_spec_ib
+	ipv4		ib_flow_spec_ipv4
+	tcp_udp		ib_flow_spec_tcp_udp
+	ipv6		ib_flow_spec_ipv6
+	tunnel		ib_flow_spec_tunnel
+	flow_tag	ib_flow_spec_action_tag
+	drop		ib_flow_spec_action_drop
+#        flow_action ib_flow_spec_action_handle
+]
+
+ib_uverbs_flow_attr {
+	type		int32[0:3]
+	size		bytesize[flow_specs, int16]
+	priority	int16[0:7]
+	num_of_specs	len[flow_specs, int8]
+	reserved1	const[0x0, int8]
+	reserved2	const[0x0, int8]
+	port		int8
+	flags		flags[ib_flow_flags, int32]
+	flow_specs	array[union_ib_flow_spec]
+}
+
+# 32+24+16 = 72 = ipv4 + esp + handle
+#ib_uverbs_flow_attr_esp {
+#	type const[0x0, int32]
+#	size const[72, int16]
+#	priority const[0x0,int16]
+#	num_of_specs const[3, int8]
+#	reserved1 const[0x0, int8]
+#	reserved2 const[0x0, int8]
+#	port const[0x0, int8]
+#	flags const[0x0, int32]
+#	ipv4 ib_flow_spec_ipv4
+#	esp ib_flow_spec_esp
+#	flow_action ib_flow_spec_action_handle
+#}
+
+create_flow_cmd_ex {
+	comp_mask	const[0x0, int32]
+	qp_handle	qp_handle
+	flow_attr	ib_uverbs_flow_attr
+}
+
+#create_flow_cmd_ex_esp {
+#	comp_mask const[0x0, int32]
+#	qp_handle qp_handle
+#	flow_attr ib_uverbs_flow_attr_esp
+#}
+
+create_flow_cmd {
+	command			const[IB_USER_VERBS_EX_CMD_CREATE_FLOW, int32]
+	in_words		bytesize8[flow_ex, int16]
+	out_words		const[0x1, int16]
+	response		ptr[out, create_flow_resp]
+	provider_in_words	const[0x0, int16]
+	provider_out_words	const[0x0, int16]
+	reserved		const[0x0, int32]
+	flow_ex			create_flow_cmd_ex
+}
+
+
+#create_flow_cmd_esp {
+#	command const[IB_USER_VERBS_EX_CMD_CREATE_FLOW, int32]
+#	in_words bytesize8[flow_ex_esp, int16]
+#	out_words const[0x2, int16]
+#	response ptr[out, create_flow_resp]
+#	provider_in_words const[0x0, int16]
+#	provider_out_words const [0x0, int16]
+#	reserved const[0x0, int32]
+#	flow_ex_esp create_flow_cmd_ex_esp
+#}
+
+destroy_flow_cmd {
+	command			const[IB_USER_VERBS_EX_CMD_DESTROY_FLOW, int32]
+	in_words		const[0x6, int16]
+	out_words		const[0x0, int16]
+	response		const[0x0, int64]
+	provider_in_words	const[0x0, int16]
+	provider_out_words	const[0x0, int16]
+	reserved		const[0x0, int32]
+	comp_mask		const[0x0, int32]
+	flow_handle		flow_handle
+}
+
+# commands
+
+# device
+syz_open_dev$ibv_device(dev ptr[in, string["/dev/infiniband/uverbs0"]], id intptr, flags flags[rdma_dev_open_flags]) fd_rdma
+write$MLX5_GET_CONTEXT(fd fd_rdma, buf ptr[inout, mlx5_get_context_cmd], len len[buf])
+close$ibv_device(fd fd_rdma)
+write$QUERY_DEVICE_EX(fd fd_rdma, buf ptr[inout, query_device_cmd_ex], len len[buf])
+
+# query_port
+write$QUERY_PORT(fd fd_rdma, buf ptr[inout, query_port_cmd], len len[buf])
+
+# pd
+write$ALLOC_PD(fd fd_rdma, buf ptr[inout, alloc_pd_cmd], len len[buf])
+write$MLX5_ALLOC_PD(fd fd_rdma, buf ptr[inout, mlx5_alloc_pd_cmd], len len[buf])
+#dealloc_pd
+write$DEALLOC_PD(fd fd_rdma, buf ptr[inout, dealloc_pd_cmd], len len[buf])
+
+#ah
+write$CREATE_AH(fd fd_rdma, buf ptr[inout, create_ah_cmd], len len[buf])
+write$DESTROY_AH(fd fd_rdma, buf ptr[inout, destroy_ah_cmd], len len[buf])
+
+# mr
+write$REG_MR(fd fd_rdma, buf ptr[inout, reg_mr_cmd], len len[buf])
+write$DEREG_MR(fd fd_rdma, buf ptr[inout, rereg_mr_cmd], len len[buf])
+write$REREG_MR(fd fd_rdma, buf ptr[inout, dereg_mr_cmd], len len[buf])
+
+# mw
+write$ALLOC_MW(fd fd_rdma, buf ptr[inout, alloc_mw_cmd], len len[buf])
+write$DEALLOC_MW(fd fd_rdma, buf ptr[inout, dealloc_mw_cmd], len len[buf])
+
+#comp_channel
+write$CREATE_COMP_CHANNEL(fd fd_rdma, buf ptr[inout, create_comp_channel_cmd], len len[buf])
+
+# cq
+write$CREATE_CQ(fd fd_rdma, buf ptr[inout, create_cq_cmd], len len[buf])
+write$MLX5_CREATE_CQ(fd fd_rdma, buf ptr[inout, mlx5_create_cq_cmd], len len[buf])
+write$CREATE_CQ_EX(fd fd_rdma, buf ptr[inout, create_cq_ex_cmd], len len[buf])
+write$RESIZE_CQ(fd fd_rdma, buf ptr[inout, resize_cq_cmd], len len[buf])
+write$DESTROY_CQ(fd fd_rdma, buf ptr[inout, destroy_cq_cmd], len len[buf])
+write$POLL_CQ(fd fd_rdma, buf ptr[inout, poll_cq_cmd], len len[buf])
+write$REQ_NOTIFY_CQ(fd fd_rdma, buf ptr[inout, req_notify_cq_cmd], len len[buf])
+
+# qp_ex
+write$MLX5_CREATE_QP(fd fd_rdma, buf ptr[inout, mlx5_create_qp_cmd], len len[buf])
+write$MLX5_CREATE_DV_QP(fd fd_rdma, buf ptr[inout, mlx5_create_dv_qp_cmd], len len[buf])
+write$DESTROY_QP(fd fd_rdma, buf ptr[inout, destroy_qp_cmd], len len[buf])
+write$QUERY_QP(fd fd_rdma, buf ptr[inout, query_qp_cmd], len len[buf])
+write$MODIFY_QP(fd fd_rdma, buf ptr[inout, modify_qp_cmd], len len[buf])
+write$POST_SEND(fd fd_rdma, buf ptr[inout, post_send_cmd], len len[buf])
+write$POST_RECV(fd fd_rdma, buf ptr[inout, post_recv_cmd], len len[buf])
+write$ATTACH_MCAST(fd fd_rdma, buf ptr[in, attach_mcast_cmd], len len[buf])
+write$DETACH_MCAST(fd fd_rdma, buf ptr[in, detach_mcast_cmd], len len[buf])
+write$CREATE_SRQ(fd fd_rdma, buf ptr[inout, create_srq_cmd], len len[buf])
+write$MLX5_CREATE_SRQ(fd fd_rdma, buf ptr[inout, mlx5_create_srq_cmd], len len[buf])
+write$MODIFY_SRQ(fd fd_rdma, buf ptr[in, modify_srq_cmd], len len[buf])
+write$QUERY_SRQ(fd fd_rdma, buf ptr[inout, query_srq_cmd], len len[buf])
+write$DESTROY_SRQ(fd fd_rdma, buf ptr[inout, destroy_srq_cmd], len len[buf])
+write$POST_SRQ_RECV(fd fd_rdma, buf ptr[inout, post_srq_recv_cmd], len len[buf])
+write$OPEN_XRCD(fd fd_rdma, buf ptr[inout, open_xrcd_cmd], len len[buf])
+write$CLOSE_XRCD(fd fd_rdma, buf ptr[inout, close_xrcd_cmd], len len[buf])
+
+# wq
+write$CREATE_WQ(fd fd_rdma, buf ptr[inout, create_wq_cmd], len len[buf])
+write$MLX5_CREATE_WQ(fd fd_rdma, buf ptr[inout, mlx5_create_wq_cmd], len len[buf])
+write$MLX5_MODIFY_WQ(fd fd_rdma, buf ptr[inout, mlx5_modify_wq_cmd], len len[buf])
+write$DESTROY_WQ(fd fd_rdma, buf ptr[inout, destroy_wq_cmd], len len[buf])
+
+# RSS
+write$CREATE_RWQ_IND_TBL(fd fd_rdma, buf ptr[inout, create_rwq_ind_table_cmd], len len[buf])
+write$DESTROY_RWQ_IND_TBL(fd fd_rdma, buf ptr[inout, destroy_rwq_ind_table_cmd], len len[buf])
+
+# create_flow
+write$CREATE_FLOW(fd fd_rdma, buf ptr[inout, create_flow_cmd], len len[buf])
+write$DESTROY_FLOW(fd fd_rdma, buf ptr[inout, destroy_flow_cmd], len len[buf])
