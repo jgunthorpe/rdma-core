@@ -24,6 +24,7 @@ publish_internal_headers(rdma
   rdma/rdma_user_ioctl_cmds.h
   rdma/rdma_user_rxe.h
   rdma/vmw_pvrdma-abi.h
+  compat-abi.h
   )
 
 publish_internal_headers(rdma/hfi
@@ -71,6 +72,7 @@ rdma_kernel_provider_abi(
   rdma/qedr-abi.h
   rdma/rdma_user_rxe.h
   rdma/vmw_pvrdma-abi.h
+  compat-abi.h
   )
 
 publish_headers(infiniband

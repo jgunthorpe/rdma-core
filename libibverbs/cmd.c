@@ -597,8 +597,8 @@ int ibv_cmd_create_srq(struct ibv_pd *pd,
 		attr->attr.max_wr = resp->max_wr;
 		attr->attr.max_sge = resp->max_sge;
 	} else {
-		struct ibv_create_srq_resp_v5 *resp_v5 =
-			(struct ibv_create_srq_resp_v5 *) resp;
+		struct ib_uverbs_create_srq_resp_v5 *resp_v5 =
+			(struct ib_uverbs_create_srq_resp_v5 *) resp;
 
 		memmove((void *) resp + sizeof *resp,
 			(void *) resp_v5 + sizeof *resp_v5,
@@ -967,15 +967,15 @@ int ibv_cmd_create_qp_ex(struct ibv_context *context,
 	(void)VALGRIND_MAKE_MEM_DEFINED(resp, resp_size);
 
 	if (abi_ver == 4) {
-		struct ibv_create_qp_resp_v4 *resp_v4 =
-			(struct ibv_create_qp_resp_v4 *)resp;
+		struct ib_uverbs_create_qp_resp_v4 *resp_v4 =
+			(struct ib_uverbs_create_qp_resp_v4 *)resp;
 
 		memmove((void *)resp + sizeof *resp,
 			(void *)resp_v4 + sizeof *resp_v4,
 			resp_size - sizeof *resp);
 	} else if (abi_ver <= 3) {
-		struct ibv_create_qp_resp_v3 *resp_v3 =
-			(struct ibv_create_qp_resp_v3 *)resp;
+		struct ib_uverbs_create_qp_resp_v3 *resp_v3 =
+			(struct ib_uverbs_create_qp_resp_v3 *)resp;
 
 		memmove((void *)resp + sizeof *resp,
 			(void *)resp_v3 + sizeof *resp_v3,
@@ -1027,15 +1027,15 @@ int ibv_cmd_create_qp(struct ibv_pd *pd,
 	}
 
 	if (abi_ver == 4) {
-		struct ibv_create_qp_resp_v4 *resp_v4 =
-			(struct ibv_create_qp_resp_v4 *) resp;
+		struct ib_uverbs_create_qp_resp_v4 *resp_v4 =
+			(struct ib_uverbs_create_qp_resp_v4 *) resp;
 
 		memmove((void *) resp + sizeof *resp,
 			(void *) resp_v4 + sizeof *resp_v4,
 			resp_size - sizeof *resp);
 	} else if (abi_ver <= 3) {
-		struct ibv_create_qp_resp_v3 *resp_v3 =
-			(struct ibv_create_qp_resp_v3 *) resp;
+		struct ib_uverbs_create_qp_resp_v3 *resp_v3 =
+			(struct ib_uverbs_create_qp_resp_v3 *) resp;
 
 		memmove((void *) resp + sizeof *resp,
 			(void *) resp_v3 + sizeof *resp_v3,

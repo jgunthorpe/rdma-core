@@ -42,6 +42,9 @@
 #include <rdma/ib_user_verbs.h>
 #include <kernel-abi/ib_user_verbs.h>
 
+#include <rdma/compat-abi.h>
+#include <kernel-abi/compat-abi.h>
+
 /*
  * The minimum and maximum kernel ABI that we can handle.
  */
@@ -95,6 +98,10 @@ struct ex_hdr {
 
 #define DECLARE_CMD(_enum, _name, _kabi)                                       \
 	DECLARE_CMDX(_enum, _name, _kabi, _kabi##_resp)
+
+#define DECLARE_CMD_COMPAT(_ver, _enum, _name, _kabi, _kabi_resp)              \
+	enum { _enum##_VERBS_##_ver = _enum };                                 \
+	DECLARE_CMDX(_enum##_VERBS_##_ver, _name, _kabi, _kabi_resp)
 
 #define DECLARE_CMD_EXX(_enum, _name, _kabi, _kabi_resp)                       \
 	struct _name {                                                         \
@@ -221,6 +228,11 @@ DECLARE_CMD_EX(IB_USER_VERBS_EX_CMD_MODIFY_QP, ibv_modify_qp_ex, ib_uverbs_ex_mo
 DECLARE_CMD_EXX(IB_USER_VERBS_EX_CMD_MODIFY_WQ, ibv_modify_wq, ib_uverbs_ex_modify_wq, empty);
 DECLARE_CMD_EX(IB_USER_VERBS_EX_CMD_QUERY_DEVICE, ibv_query_device_ex, ib_uverbs_ex_query_device);
 
+DECLARE_CMD_COMPAT(v5, IB_USER_VERBS_CMD_CREATE_SRQ, ibv_create_srq_v5, ib_uverbs_create_srq, ib_uverbs_create_srq_resp_v5);
+DECLARE_CMD_COMPAT(v4, IB_USER_VERBS_CMD_CREATE_QP, ibv_create_qp_v4, ib_uverbs_create_cq, ib_uverbs_create_qp_resp_v4);
+DECLARE_CMD_COMPAT(v3, IB_USER_VERBS_CMD_CREATE_QP, ibv_create_qp_v3, ib_uverbs_create_cq, ib_uverbs_create_qp_resp_v3);
+DECLARE_CMD_COMPAT(v3, IB_USER_VERBS_CMD_MODIFY_SRQ, ibv_modify_srq_v3, ib_uverbs_modify_srq_v3, empty);
+
 /*
  * Both ib_uverbs_create_qp and ib_uverbs_ex_create_qp start with the same
  * structure, this function converts the ex version into the normal version
@@ -275,35 +287,6 @@ struct ibv_kern_spec {
 		struct ib_uverbs_flow_spec_action_handle handle;
 		struct ib_uverbs_flow_spec_action_count flow_count;
 	};
-};
-
-struct ibv_modify_srq_v3 {
-	struct ib_uverbs_cmd_hdr hdr;
-	__u32 srq_handle;
-	__u32 attr_mask;
-	__u32 max_wr;
-	__u32 max_sge;
-	__u32 srq_limit;
-	__u32 reserved;
-};
-
-struct ibv_create_qp_resp_v3 {
-	__u32 qp_handle;
-	__u32 qpn;
-};
-
-struct ibv_create_qp_resp_v4 {
-	__u32 qp_handle;
-	__u32 qpn;
-	__u32 max_send_wr;
-	__u32 max_recv_wr;
-	__u32 max_send_sge;
-	__u32 max_recv_sge;
-	__u32 max_inline_data;
-};
-
-struct ibv_create_srq_resp_v5 {
-	__u32 srq_handle;
 };
 
 #endif /* KERN_ABI_H */

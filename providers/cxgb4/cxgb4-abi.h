@@ -37,24 +37,6 @@
 #include <rdma/cxgb4-abi.h>
 #include <kernel-abi/cxgb4-abi.h>
 
-/* compat for ABI version 0 */
-#define _c4iw_create_qp_resp_v0                                                \
-	{                                                                      \
-		__u64 sq_key;                                                  \
-		__u64 rq_key;                                                  \
-		__u64 sq_db_gts_key;                                           \
-		__u64 rq_db_gts_key;                                           \
-		__u64 sq_memsize;                                              \
-		__u64 rq_memsize;                                              \
-		__u32 sqid;                                                    \
-		__u32 rqid;                                                    \
-		__u32 sq_size;                                                 \
-		__u32 rq_size;                                                 \
-		__u32 qid_mask;                                                \
-	};
-struct c4iw_create_qp_resp_v0 _c4iw_create_qp_resp_v0;
-#define _STRUCT_c4iw_create_qp_resp_v0 struct _c4iw_create_qp_resp_v0
-
 DECLARE_DRV_CMD(uc4iw_alloc_pd, IB_USER_VERBS_CMD_ALLOC_PD,
 		empty, c4iw_alloc_pd_resp);
 DECLARE_DRV_CMD(uc4iw_create_cq, IB_USER_VERBS_CMD_CREATE_CQ,
